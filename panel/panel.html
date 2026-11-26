@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MonevHub AI - Side Panel</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <div class="panel-layout">
+    <!-- Header -->
+    <header class="panel-header">
+      <div class="panel-brand">
+        <div class="panel-logo">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+            <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+            <path d="M10 9H8"/>
+            <path d="M16 13H8"/>
+            <path d="M16 17H8"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="panel-title">MonevHub AI</h1>
+          <p class="panel-subtitle">Bilah Samping Asisten MagangHub</p>
+        </div>
+      </div>
+      <button type="button" id="btn-panel-open-options" class="btn-icon" title="Buka Dashboard & Pengaturan">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Status Lisensi Lengkap -->
+    <div class="panel-card" style="padding: 9px 11px;">
+      <div class="panel-meta-row">
+        <span class="panel-meta-label">Status Lisensi</span>
+        <span id="panel-lic-badge" class="panel-badge invalid">MEMERIKSA</span>
+      </div>
+      <div class="panel-meta-row">
+        <span class="panel-meta-label">Pemilik</span>
+        <strong id="panel-lic-owner" style="font-size: 11px;">-</strong>
+      </div>
+      <div class="panel-meta-row">
+        <span class="panel-meta-label">Perangkat</span>
+        <span id="panel-lic-device" style="font-size: 11px; color: #334155;">-</span>
+      </div>
+      <div class="panel-meta-row">
+        <span class="panel-meta-label">Masa Berlaku</span>
+        <span id="panel-lic-exp" style="font-size: 11px; color: #334155;">-</span>
+      </div>
+      <div class="panel-meta-row">
+        <span class="panel-meta-label">Log Tersimpan</span>
+        <strong id="panel-log-count" style="font-size: 11.5px;">0 hari</strong>
+      </div>
+    </div>
+
+    <!-- Lock Notice (Jika Belum Aktif) -->
+    <div id="panel-lock-card" class="panel-card" style="display: none; border-color: #fecaca; background: #fef2f2;">
+      <p style="font-size: 11.5px; color: #991b1b; font-weight: 600; margin-bottom: 8px;">
+        Lisensi belum aktif pada perangkat ini. Aktivasi melalui Popup atau Dashboard.
+      </p>
+      <button type="button" id="btn-panel-activate-page" class="btn btn-primary btn-block">Buka Halaman Aktivasi</button>
+    </div>
+
+    <!-- Main Panel Content -->
+    <div id="panel-main-content" style="display: none;">
+      <div class="panel-nav-tabs">
+        <button type="button" class="panel-tab-btn active" data-tab="panel-tab-daily">Isi Laporan Harian</button>
+        <button type="button" class="panel-tab-btn" data-tab="panel-tab-extract">Ekstrak &amp; Rekap</button>
+      </div>
+
+      <!-- TAB 1: ISI HARIAN -->
+      <div id="panel-tab-daily" class="panel-tab-content active">
+        <div class="panel-card">
+          <div class="form-group">
+            <label class="form-label" for="p-presensi">Status Kehadiran</label>
+            <select id="p-presensi" class="panel-select">
+              <option value="Hadir" selected>Hadir</option>
+              <option value="Izin">Izin</option>
+              <option value="Sakit">Sakit</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" id="p-activity-label" for="p-activity">Poin Kegiatan Hari Ini</label>
+            <textarea id="p-activity" class="panel-textarea" rows="3" placeholder="Contoh:&#10;- Perbaikan printer unit layanan&#10;- Input data CKG"></textarea>
+            <span class="panel-hint" id="p-activity-hint">AI akan menyusun narasi formal &ge; 100 karakter.</span>
+          </div>
+
+          <div class="form-group" id="p-obstacle-group">
+            <label class="panel-check">
+              <input type="checkbox" id="p-has-obstacle">
+              <span>Mengalami kendala hari ini</span>
+            </label>
+          </div>
+
+          <div class="form-group" id="p-obstacle-wrap" style="display: none;">
+            <label class="form-label" for="p-obstacle">Ringkasan Kendala</label>
+            <textarea id="p-obstacle" class="panel-textarea" rows="2" placeholder="Contoh: Gangguan jaringan internet"></textarea>
+          </div>
+
+          <!-- Lokasi Laporan (GPS / Default) -->
+          <div class="form-group" style="padding: 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; gap: 4px;">
+              <label class="panel-check" style="margin: 0;">
+                <input type="checkbox" id="p-send-loc" checked>
+                <span style="font-weight: 600;">Kirim Lokasi</span>
+              </label>
+              <div style="display: flex; gap: 4px;">
+                <button type="button" id="btn-p-open-map" class="btn btn-secondary" style="padding: 3px 7px; font-size: 10.5px; color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff;">Set Peta</button>
+                <button type="button" id="btn-p-get-gps" class="btn btn-secondary" style="padding: 3px 7px; font-size: 10.5px;">Get GPS</button>
+              </div>
+            </div>
+            <div id="p-loc-fields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+              <input type="text" id="p-loc-lat" class="panel-input" placeholder="Latitude (-6.xxxx)" style="font-size: 11px; padding: 4px 6px;">
+              <input type="text" id="p-loc-lng" class="panel-input" placeholder="Longitude (108.xxxx)" style="font-size: 11px; padding: 4px 6px;">
+            </div>
+            <label class="panel-check" style="margin-top: 5px; font-size: 10.5px; color: #475569;">
+              <input type="checkbox" id="p-loc-save-default" checked>
+              <span>Simpan sebagai lokasi default</span>
+            </label>
+          </div>
+
+          <button type="button" id="btn-p-generate" class="btn btn-primary btn-block" style="margin-top: 8px;">
+            <span>Generate &amp; Terapkan ke Form</span>
+          </button>
+        </div>
+
+        <!-- Preview Hasil -->
+        <div id="p-result-card" class="panel-card" style="display: none;">
+          <div class="form-group">
+            <label class="form-label"><span>Uraian Aktivitas</span><span id="p-char-uraian" class="char-pill">0</span></label>
+            <textarea id="p-res-uraian" class="panel-textarea" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label"><span>Pembelajaran</span><span id="p-char-pembelajaran" class="char-pill">0</span></label>
+            <textarea id="p-res-pembelajaran" class="panel-textarea" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label"><span>Kendala</span><span id="p-char-kendala" class="char-pill">0</span></label>
+            <textarea id="p-res-kendala" class="panel-textarea" rows="2"></textarea>
+          </div>
+          <div class="btn-row" style="margin-top: 8px;">
+            <button type="button" id="btn-p-fill" class="btn btn-success">Terapkan Ulang</button>
+            <button type="button" id="btn-p-copy" class="btn btn-secondary">Salin Teks</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: EKSTRAK & REKAP -->
+      <div id="panel-tab-extract" class="panel-tab-content">
+        <div class="panel-card">
+          <div class="form-group">
+            <label class="form-label" for="p-cycle-mode">Siklus Laporan</label>
+            <select id="p-cycle-mode" class="panel-select">
+              <option value="period" selected>Siklus Periode (Tgl 21 - 20)</option>
+              <option value="calendar">Bulan Kalender (Tgl 1 - 31)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="p-month">Bulan Acuan</label>
+            <input type="month" id="p-month" class="panel-input">
+          </div>
+
+          <button type="button" id="btn-p-extract-and-recap" class="btn btn-primary btn-block" style="margin-top: 8px;">
+            <span>Ekstrak &amp; Susun Rekap AI</span>
+          </button>
+
+          <button type="button" id="btn-p-open-history" class="btn btn-secondary btn-block" style="margin-top: 6px;">
+            Buka Log &amp; Ekspor PDF / Word
+          </button>
+        </div>
+
+        <div id="p-recap-card" class="panel-card" style="display: none;">
+          <div class="form-group">
+            <label class="form-label">Hasil Rekapitulasi AI</label>
+            <textarea id="p-res-recap" class="panel-textarea" rows="8"></textarea>
+          </div>
+          <button type="button" id="btn-p-copy-recap" class="btn btn-secondary btn-block" style="margin-top: 6px;">Salin Rekap</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-status" class="panel-status"></div>
+  </div>
+
+  <!-- MODAL PETA SIDEBAR -->
+  <div id="panel-map-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 9999; padding: 12px; align-items: center; justify-content: center;">
+    <div style="background: #fff; border-radius: 8px; width: 100%; max-width: 340px; padding: 12px; border: 1px solid #cbd5e1;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <strong style="font-size: 12.5px;">Set Lokasi di Peta</strong>
+        <button type="button" id="btn-p-map-close" style="background: none; border: none; font-size: 16px; cursor: pointer;">&times;</button>
+      </div>
+      <div style="display: flex; gap: 4px; margin-bottom: 6px;">
+        <input type="text" id="p-map-search" class="panel-input" placeholder="Cari alamat / instansi..." style="font-size: 11px; padding: 5px 7px;">
+        <button type="button" id="btn-p-map-search" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;">Cari</button>
+      </div>
+      <div id="p-map-results" style="display: none; max-height: 85px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 5px; margin-bottom: 6px; font-size: 10.5px;"></div>
+      <input type="text" id="p-map-gmaps-url" class="panel-input" placeholder="Atau tempel link Google Maps..." style="font-size: 10.5px; padding: 5px 7px; margin-bottom: 6px;">
+      <div style="position: relative; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
+        <canvas id="p-map-canvas" width="314" height="190" style="display: block; width: 100%; height: 190px; cursor: grab;"></canvas>
+        <div style="position: absolute; right: 6px; bottom: 6px; display: flex; flex-direction: column; gap: 3px;">
+          <button type="button" id="btn-p-map-zin" class="btn btn-secondary" style="padding: 1px 7px; font-weight: 700;">+</button>
+          <button type="button" id="btn-p-map-zout" class="btn btn-secondary" style="padding: 1px 7px; font-weight: 700;">-</button>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; font-size: 10.5px;">
+        <code id="p-map-coords">-6.200000, 106.816666</code>
+        <button type="button" id="btn-p-map-save" class="btn btn-primary" style="padding: 5px 10px; font-size: 11px;">Simpan Lokasi</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../lib/license.js"></script>
+  <script src="../lib/ai.js"></script>
+  <script src="../lib/map-picker.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

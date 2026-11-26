@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MonevHub Mobile - Kemnaker Style + Injected AI</title>
+  <link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+  <div class="phone-shell">
+    <main class="wv-body">
+      <!-- 1. BERANDA (Kemnaker Exact Style + Injected Card) -->
+      <section id="wv-beranda" class="wv-page active">
+        <div class="km-hero">
+          <div>
+            <h1>Halo, Febriana 👋</h1>
+            <p>Uptd Puskesmas Cipicung</p>
+          </div>
+          <div class="km-avatar">FR</div>
+        </div>
+
+        <div class="km-announce">
+          <div class="km-announce-icon">!</div>
+          <div>
+            <strong>5 pengumuman</strong>
+            <a href="#pengumuman" id="btn-km-announce">Lihat pengumuman</a>
+          </div>
+        </div>
+
+        <div class="km-card">
+          <div class="km-today-head">
+            <div class="km-today-left">
+              <div class="km-cal-badge">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+                </svg>
+              </div>
+              <div>
+                <div style="font-size: 15px; font-weight: 800; color: #0f172a;">Hari Ini</div>
+                <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Kamis, 26 November 2026</div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Periode magang 21 Sep 2026–20 Mar 2027</div>
+              </div>
+            </div>
+            <span class="km-pill-aktif">Aktif</span>
+          </div>
+
+          <div class="km-center-status">
+            <div class="km-circle-ok">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                <polyline points="9 14 11 16 15 12"/>
+              </svg>
+            </div>
+            <div style="font-size: 15.5px; font-weight: 800; color: #020617; margin-bottom: 4px;">Laporan hari ini sudah diisi</div>
+            <p style="font-size: 12.5px; color: #64748b;">Laporan dan kehadiran Anda sudah tercatat.</p>
+          </div>
+
+          <button type="button" class="km-btn-green" id="btn-km-goto-riwayat">
+            <span style="display:flex;align-items:center;gap:8px;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <span>Lihat Laporan Hari Ini</span>
+            </span>
+            <span>&rsaquo;</span>
+          </button>
+
+          <div class="km-deadline-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+              <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/>
+            </svg>
+            <span>Batas pengisian laporan hari ini pukul <strong>23.59 WIB</strong></span>
+          </div>
+        </div>
+
+        <div class="km-server-chip">
+          <span id="km-server-time">Waktu Server 17.31.04 WIB (GMT+7)</span>
+        </div>
+
+        <!-- INJECTED CARD DI BERANDA -->
+        <div class="inj-card">
+          <div class="inj-head">
+            <strong>Status Lisensi &amp; Ringkasan AI</strong>
+            <span class="inj-tag">MonevHub AI</span>
+          </div>
+          <div style="font-size: 12px; display: grid; gap: 5px; color: #334155;">
+            <div style="display: flex; justify-content: space-between;"><span>Lisensi Perangkat</span><span class="pill ok">AKTIF</span></div>
+            <div style="display: flex; justify-content: space-between;"><span>Masa Berlaku</span><strong>2027-10-15</strong></div>
+            <div style="display: flex; justify-content: space-between;"><span>Laporan Siap Ekspor</span><strong>18 Hari</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. RIWAYAT KEHADIRAN (Kemnaker Exact Style + Injected Cards di Bawah Form) -->
+      <section id="wv-riwayat" class="wv-page">
+        <h1 class="wv-h1">Riwayat Kehadiran</h1>
+        <p class="wv-sub">Lihat catatan kehadiran dan laporan harian Anda.</p>
+
+        <div class="wv-period-bar">
+          <button type="button" class="wv-arrow">&lsaquo;</button>
+          <div style="text-align: center;">
+            <div style="font-size: 13px; font-weight: 800;">Periode 3</div>
+            <div style="font-size: 11px; color: #64748b;">21 Nov 2026 - 20 Des 2026</div>
+          </div>
+          <button type="button" class="wv-arrow">&rsaquo;</button>
+        </div>
+
+        <div class="km-card">
+          <div class="wv-cal-grid">
+            <div class="wv-cal-head">Sen</div><div class="wv-cal-head">Sel</div><div class="wv-cal-head">Rab</div><div class="wv-cal-head">Kam</div><div class="wv-cal-head">Jum</div><div class="wv-cal-head">Sab</div><div class="wv-cal-head">Min</div>
+            <div></div><div></div><div></div><div></div><div></div>
+            <div class="wv-day done">21<span class="wv-dot">&#10003;</span></div>
+            <div class="wv-day holiday">22<span class="wv-dot">&#9632;</span></div>
+            <div class="wv-day done">23<span class="wv-dot">&#10003;</span></div>
+            <div class="wv-day done">24<span class="wv-dot">&#10003;</span></div>
+            <div class="wv-day done">25<span class="wv-dot">&#10003;</span></div>
+            <div class="wv-day today">26<span class="wv-dot">&#10003;</span></div>
+            <div class="wv-day">27<span class="wv-dot">&#9675;</span></div>
+            <div class="wv-day">28<span class="wv-dot">&#9675;</span></div>
+            <div class="wv-day holiday">29<span class="wv-dot">&#9632;</span></div>
+          </div>
+          <div class="km-legend">
+            <span><span style="color:#059669;">&#10003;</span> Hadir disetujui</span>
+            <span><span style="color:#64748b;">&#9675;</span> Belum Diisi</span>
+            <span><span style="color:#334155;">&#9632;</span> Hari Libur</span>
+          </div>
+        </div>
+
+        <!-- Input Field Asli Monev Kemnaker -->
+        <div class="km-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong style="font-size: 13px;">Form Laporan Harian (Asli)</strong>
+            <span class="pill info" id="wv-form-badge">Siap Diisi</span>
+          </div>
+          <div class="m-field">
+            <label class="m-label">Presensi</label>
+            <input type="text" id="wv-real-presensi" class="m-input" value="Hadir" readonly>
+          </div>
+          <div class="m-field">
+            <label class="m-label">Uraian Aktivitas (&ge;100 char)</label>
+            <textarea id="wv-real-uraian" class="m-textarea" rows="2" placeholder="Terisi otomatis dari card di bawah..."></textarea>
+          </div>
+          <div class="m-field" style="margin-bottom: 0;">
+            <label class="m-label">Pembelajaran &amp; Kendala</label>
+            <textarea id="wv-real-extra" class="m-textarea" rows="2" placeholder="Terisi otomatis dari card di bawah..."></textarea>
+          </div>
+        </div>
+
+        <!-- INJECTED CARD 1: Asisten Isi Laporan AI -->
+        <div class="inj-card">
+          <div class="inj-head">
+            <strong>Asisten Isi Laporan AI</strong>
+            <span class="inj-tag">Terinjeksi</span>
+          </div>
+          <div class="m-field">
+            <label class="m-label" for="m-presensi">Status Kehadiran</label>
+            <select id="m-presensi" class="m-select">
+              <option value="Hadir" selected>Hadir</option>
+              <option value="Izin">Izin</option>
+              <option value="Sakit">Sakit</option>
+            </select>
+          </div>
+          <div class="m-field">
+            <label class="m-label" id="m-act-label" for="m-act-input">Poin Kegiatan Hari Ini</label>
+            <textarea id="m-act-input" class="m-textarea" rows="2" placeholder="Contoh: Pemeliharaan jaringan & input data harian"></textarea>
+          </div>
+          <div class="m-field" id="m-obs-group">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 11.5px;">
+              <input type="checkbox" id="m-has-obs">
+              <span>Mengalami kendala hari ini</span>
+            </label>
+          </div>
+          <button type="button" id="btn-m-apply" class="m-btn m-btn-primary">Generate &amp; Terapkan ke Form Atas</button>
+        </div>
+
+        <!-- INJECTED CARD 2: Tarik Data & Ekspor per Periode -->
+        <div class="inj-card">
+          <div class="inj-head">
+            <strong>Tarik Data &amp; Ekspor Periode</strong>
+            <span class="inj-tag">Terinjeksi</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <button type="button" id="btn-m-sync-period" class="m-btn m-btn-secondary">Tarik Data Periode</button>
+            <button type="button" id="btn-m-export-period" class="m-btn m-btn-primary">Ekspor PDF / Word</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. PERKEMBANGAN -->
+      <section id="wv-perkembangan" class="wv-page">
+        <h1 class="wv-h1">Perkembangan</h1>
+        <p class="wv-sub">Pantau progres magang dan evaluasi pembimbing.</p>
+
+        <div class="km-card">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 4px;">Status Persetujuan Mentor (Asli)</div>
+          <p style="font-size: 12px; color: #475569;">Periode 1 &amp; 2 disetujui penuh oleh pembimbing instansi.</p>
+        </div>
+
+        <div class="inj-card">
+          <div class="inj-head">
+            <strong>Rekapitulasi Bulanan AI &amp; Laporan</strong>
+            <span class="inj-tag">MonevHub AI</span>
+          </div>
+          <p style="font-size: 11.5px; color: #475569; margin-bottom: 10px;">
+            Susun ringkasan evaluasi bulanan otomatis (plain text) dan ekspor bersama log harian.
+          </p>
+          <button type="button" id="btn-m-run-recap" class="m-btn m-btn-primary" style="margin-bottom: 8px;">Ekstrak &amp; Susun Rekap AI</button>
+          <button type="button" id="btn-m-open-logs" class="m-btn m-btn-secondary">Lihat Log Riwayat Tersimpan</button>
+        </div>
+      </section>
+
+      <!-- 4. PENGATURAN (Akun Asli + Menu Modal Popup + Cek Izin Akses) -->
+      <section id="wv-settings" class="wv-page">
+        <h1 class="wv-h1">Pengaturan</h1>
+        <p class="wv-sub">Profil Akun MonevHub, Konfigurasi AI, dan Cek Izin Akses.</p>
+
+        <div class="km-card">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 6px;">Akun Peserta MonevHub (Asli)</div>
+          <div style="font-size: 12px; color: #334155; display: grid; gap: 3px;">
+            <div>Sesi Login: <strong style="color: #059669;">Aktif (WebView)</strong></div>
+            <div>Instansi: <strong>Uptd Puskesmas Cipicung</strong></div>
+          </div>
+        </div>
+
+        <div class="inj-card">
+          <div class="inj-head">
+            <strong>Pengaturan MonevHub AI</strong>
+            <span class="inj-tag">Modal Popup</span>
+          </div>
+          <div class="set-row">
+            <div><strong>Konfigurasi API &amp; Model AI</strong><div style="font-size:10.5px;color:#64748b;">Server Lisensi / API Key / OAuth</div></div>
+            <button type="button" class="m-btn m-btn-secondary m-btn-sm btn-open-set-modal" data-modal="modal-set-ai">Atur</button>
+          </div>
+          <div class="set-row">
+            <div><strong>Template Laporan &amp; TTD</strong><div style="font-size:10.5px;color:#64748b;">A4 Portrait/Landscape, TTD PNG</div></div>
+            <button type="button" class="m-btn m-btn-secondary m-btn-sm btn-open-set-modal" data-modal="modal-set-export">Atur</button>
+          </div>
+          <div class="set-row">
+            <div><strong>Lokasi Default GPS</strong><div style="font-size:10.5px;color:#64748b;">Koordinat cadangan &amp; Peta</div></div>
+            <button type="button" class="m-btn m-btn-secondary m-btn-sm btn-open-set-modal" data-modal="modal-set-loc">Atur</button>
+          </div>
+          <div class="set-row">
+            <div><strong>Lisensi Perangkat</strong><div style="font-size:10.5px;color:#64748b;">Aktivasi &amp; Device ID</div></div>
+            <button type="button" class="m-btn m-btn-secondary m-btn-sm btn-open-set-modal" data-modal="modal-set-lic">Atur</button>
+          </div>
+        </div>
+
+        <div class="inj-card">
+          <div class="inj-head">
+            <strong>Cek Akses &amp; Izin Perangkat</strong>
+            <button type="button" id="btn-recheck-perms" class="m-btn m-btn-secondary m-btn-sm">Cek Ulang</button>
+          </div>
+          <div class="set-row">
+            <div><strong>Lokasi / GPS</strong><div style="font-size:10.5px;color:#64748b;">Akurasi presensi harian</div></div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span id="perm-gps-badge" class="pill warn">Memeriksa</span>
+              <button type="button" id="btn-req-gps" class="m-btn m-btn-primary m-btn-sm">Izinkan</button>
+            </div>
+          </div>
+          <div class="set-row">
+            <div><strong>Penyimpanan / Unduhan</strong><div style="font-size:10.5px;color:#64748b;">Simpan ekspor PDF &amp; Word</div></div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span id="perm-dl-badge" class="pill warn">Belum</span>
+              <button type="button" id="btn-req-dl" class="m-btn m-btn-primary m-btn-sm">Izinkan</button>
+            </div>
+          </div>
+          <div class="set-row">
+            <div><strong>Notifikasi</strong><div style="font-size:10.5px;color:#64748b;">Pengingat isi laporan harian</div></div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span id="perm-notif-badge" class="pill warn">Memeriksa</span>
+              <button type="button" id="btn-req-notif" class="m-btn m-btn-primary m-btn-sm">Izinkan</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Navbar Gaya Asli Kemnaker + Icon -->
+    <nav class="wv-bottom-nav">
+      <button type="button" class="wv-nav-btn active" data-wv="wv-beranda">
+        <div class="wv-nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <span>Beranda</span>
+      </button>
+      <button type="button" class="wv-nav-btn" data-wv="wv-riwayat">
+        <div class="wv-nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+          </svg>
+        </div>
+        <span>Riwayat</span>
+      </button>
+      <button type="button" class="wv-nav-btn" data-wv="wv-perkembangan">
+        <div class="wv-nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/>
+          </svg>
+        </div>
+        <span>Perkembangan</span>
+      </button>
+      <button type="button" class="wv-nav-btn" data-wv="wv-settings">
+        <div class="wv-nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </div>
+        <span>Pengaturan</span>
+      </button>
+    </nav>
+
+    <!-- MODAL POPUP PENGATURAN -->
+    <div id="m-settings-modal" class="m-modal-backdrop">
+      <div class="m-modal-card">
+        <div class="m-modal-head">
+          <strong id="m-modal-title" style="font-size: 13.5px;">Pengaturan</strong>
+          <button type="button" id="btn-m-modal-close" style="background:none;border:none;font-size:18px;cursor:pointer;">&times;</button>
+        </div>
+        <div id="m-modal-body" style="font-size: 12px; color: #334155;"></div>
+        <div style="margin-top: 12px; display: flex; gap: 8px;">
+          <button type="button" id="btn-m-modal-save" class="m-btn m-btn-primary">Simpan</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="m-toast" class="m-toast"></div>
+  </div>
+
+  <script src="mobile.js"></script>
+</body>
+</html>

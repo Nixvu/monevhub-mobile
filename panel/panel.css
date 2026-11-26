@@ -1,0 +1,330 @@
+/* MonevHub AI - Chrome Side Panel Stylesheet (Clean & Compact) */
+:root {
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --paper: #f8fafc;
+  --surface: #ffffff;
+  --primary: #1d4ed8;
+  --primary-dark: #1e40af;
+  --primary-light: #eff6ff;
+  --success: #0f766e;
+  --success-light: #f0fdfa;
+  --danger: #b91c1c;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+  padding: 12px;
+}
+
+.panel-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 24px);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: var(--primary-light);
+  border: 1px solid #bfdbfe;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 750;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.panel-subtitle {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.btn-icon {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-icon:hover {
+  color: var(--ink);
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+/* Nav Tabs */
+.panel-nav-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: #e2e8f0;
+  padding: 3px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.panel-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 650;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.panel-tab-btn.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.panel-tab-content {
+  display: none;
+}
+
+.panel-tab-content.active {
+  display: block;
+}
+
+/* Cards */
+.panel-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 11px 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.panel-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  margin-bottom: 4px;
+}
+
+.panel-meta-row:last-child { margin-bottom: 0; }
+.panel-meta-label { color: var(--muted); font-weight: 500; }
+
+.panel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 99px;
+}
+
+.panel-badge.valid {
+  background: var(--success-light);
+  color: var(--success);
+  border: 1px solid #99f6e4;
+}
+
+.panel-badge.invalid {
+  background: #fef2f2;
+  color: var(--danger);
+  border: 1px solid #fecaca;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 9px;
+}
+
+.form-group:last-child { margin-bottom: 0; }
+
+.form-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.panel-input, .panel-select, .panel-textarea {
+  width: 100%;
+  padding: 7px 9px;
+  font-size: 12px;
+  color: var(--ink);
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.panel-input:focus, .panel-select:focus, .panel-textarea:focus {
+  border-color: var(--primary);
+  background: var(--surface);
+}
+
+.panel-textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.panel-hint {
+  display: block;
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.panel-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: #334155;
+  font-weight: 550;
+  cursor: pointer;
+  user-select: none;
+}
+
+.char-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: var(--muted);
+}
+
+.char-pill.valid {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.char-pill.invalid {
+  background: #fef2f2;
+  color: var(--danger);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 650;
+  min-height: 33px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-block { width: 100%; }
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.btn-success {
+  background: var(--success);
+  color: #ffffff;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #115e59;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: var(--ink);
+}
+
+.btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+/* Status Footer */
+.panel-status {
+  margin-top: auto;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 550;
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  display: none;
+}
+
+.panel-status.error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MonevHub AI</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-box">
+    <!-- Header Ringkas -->
+    <header class="header">
+      <div class="header-brand">
+        <div class="logo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+            <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+            <path d="M10 9H8"/>
+            <path d="M16 13H8"/>
+            <path d="M16 17H8"/>
+          </svg>
+        </div>
+        <div>
+          <h1>MonevHub AI</h1>
+          <p class="subtitle">Asisten Laporan MagangHub</p>
+        </div>
+      </div>
+      <span class="ver-badge">v1.0.0</span>
+    </header>
+
+    <!-- KONDISI 1: BELUM TERAKTIVASI -->
+    <div id="view-unactivated" style="display: none;">
+      <div class="card-license card-lock">
+        <div class="lic-status-row" style="color: #dc2626; margin-bottom: 8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <strong>Perangkat Belum Teraktivasi</strong>
+        </div>
+
+        <div class="hw-row" style="margin-top: 0; margin-bottom: 8px; padding-top: 0; border-top: none;">
+          <span>HW ID: <code id="gate-hw-fp" class="hw-code">Memuat...</code></span>
+          <button type="button" id="btn-gate-copy-fp" class="btn-copy-xs">Salin</button>
+        </div>
+
+        <div class="form-group-popup">
+          <label class="popup-label" for="gate-input-key">Kode Lisensi:</label>
+          <input type="text" id="gate-input-key" class="popup-input" placeholder="MH-XXXX-XXXX" autocomplete="off">
+        </div>
+
+        <div class="form-group-popup">
+          <label class="popup-label" for="gate-user-name">Nama Peserta:</label>
+          <input type="text" id="gate-user-name" class="popup-input" placeholder="Nama lengkap" autocomplete="off">
+        </div>
+
+        <div class="form-group-popup">
+          <label class="popup-label" for="gate-device-name">Label Perangkat:</label>
+          <input type="text" id="gate-device-name" class="popup-input" placeholder="Contoh: Laptop Kerja" autocomplete="off">
+        </div>
+
+        <button type="button" id="btn-gate-activate" class="btn btn-primary btn-block" style="margin-top: 4px;">
+          <span>Aktifkan Perangkat</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- KONDISI 2: SUDAH TERAKTIVASI -->
+    <div id="view-activated" style="display: none;">
+      <!-- Status Lisensi Ringkas -->
+      <div class="card-license">
+        <div class="lic-status-row">
+          <span class="lic-dot"></span>
+          <strong id="lic-status-text">Lisensi Sah: <span id="lic-owner">-</span></strong>
+        </div>
+        <div class="lic-compact-meta">
+          <span id="lic-device" class="lic-chip">-</span>
+          <span class="lic-chip-sep">&bull;</span>
+          <span class="lic-chip-txt">s/d: <strong id="lic-expired">Permanen</strong></span>
+        </div>
+        <div class="hw-row">
+          <span>HW: <code id="lic-hw-fp" class="hw-code">...</code></span>
+          <button type="button" id="btn-copy-fp" class="btn-copy-xs">Salin</button>
+        </div>
+      </div>
+
+      <!-- Pilihan Mode Asisten (Floating vs Side Panel) -->
+      <div class="mode-switch-box">
+        <span class="mode-switch-label">Mode Tampilan Asisten:</span>
+        <div class="mode-pills">
+          <button type="button" id="btn-mode-floating" class="mode-pill active">Widget Melayang</button>
+          <button type="button" id="btn-mode-sidepanel" class="mode-pill">Bilah Samping</button>
+        </div>
+      </div>
+
+      <!-- Tombol Aksi Utama -->
+      <button type="button" id="btn-open-sidepanel" class="btn btn-primary btn-block">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="18" x="3" y="3" rx="2"/>
+          <path d="M15 3v18"/>
+        </svg>
+        <span>Buka Asisten (Side Panel)</span>
+      </button>
+
+      <button type="button" id="btn-open-inpage" class="btn btn-secondary btn-block">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m22 2-7 20-4-9-9-4Z"/>
+          <path d="M22 2 11 13"/>
+        </svg>
+        <span>Buka Form di Halaman Monev</span>
+      </button>
+
+      <button type="button" id="btn-open-options" class="btn btn-secondary btn-block">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <span>Dashboard, Log &amp; Ekspor PDF/Word</span>
+      </button>
+
+      <div class="popup-footer">
+        <span id="popup-log-count">0 laporan tersimpan</span>
+        <span id="popup-ai-mode">AI: Injected</span>
+      </div>
+    </div>
+
+    <div id="popup-status" class="popup-status"></div>
+  </div>
+
+  <script src="../lib/license.js"></script>
+  <script src="../lib/ai.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

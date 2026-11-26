@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard & Pengaturan - MonevHub</title>
+  <link rel="stylesheet" href="../assets/tailwind.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="console-shell">
+    <!-- Left Full-Height Sidebar (LicenseCore SaaS Console Style) -->
+    <aside class="console-sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-square">M</div>
+        <span class="brand-name">MonevHub</span>
+        <span class="brand-ver">v1.0</span>
+      </div>
+
+      <nav class="dash-nav">
+        <div class="nav-group-label">Insight</div>
+        <button class="nav-item active" data-view="view-dashboard">
+          <svg class="lucide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
+          </svg>
+          <span>Dashboard</span>
+        </button>
+
+        <div class="nav-group-label">Laporan</div>
+        <button class="nav-item" data-view="view-history">
+          <svg class="lucide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M8 16H3v5"/>
+          </svg>
+          <span>Log Riwayat</span>
+        </button>
+        <button class="nav-item" data-view="view-recap">
+          <svg class="lucide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" x2="18" y1="20" y2="10"/>
+            <line x1="12" x2="12" y1="20" y2="4"/>
+            <line x1="6" x2="6" y1="20" y2="14"/>
+          </svg>
+          <span>Rekapitulasi AI</span>
+        </button>
+        <button class="nav-item" data-view="view-export-tpl">
+          <svg class="lucide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <span>Template &amp; TTD</span>
+        </button>
+
+        <div class="nav-group-label">Sistem</div>
+        <button class="nav-item" data-view="view-settings">
+          <svg class="lucide" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span>Pengaturan</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>&copy; 2026 MonevHub AI</span>
+      </div>
+    </aside>
+
+    <!-- Right Workspace -->
+    <div class="console-workspace">
+      <header class="console-topbar">
+        <div class="topbar-left">
+          <span class="topbar-pill">Asisten MagangHub Kemnaker</span>
+        </div>
+        <div class="topbar-right">
+          <div class="user-badge" id="side-lic-status">MEMERIKSA</div>
+          <div class="topbar-user">
+            <span class="user-avatar">MH</span>
+            <span class="topbar-username" id="side-user-name">Pengguna</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Area -->
+      <main class="dash-main">
+
+      <!-- VIEW 0: DASHBOARD RINGKASAN -->
+      <section id="view-dashboard" class="dash-view active">
+        <header class="view-header">
+          <div>
+            <h1>Dashboard Ringkasan</h1>
+            <p>Pantau statistik kehadiran (Masuk, Sakit, Izin), kelengkapan laporan, dan kesiapan ekspor per periode.</p>
+          </div>
+          <div class="view-actions">
+            <select id="dash-period-filter" class="input-control" style="width: auto; min-width: 210px; height: 34px; font-size: 12px;">
+              <option value="ALL">Semua Periode</option>
+            </select>
+            <button id="btn-dash-sync" class="btn btn-primary">
+              <svg class="lucide" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                <path d="M8 16H3v5"/>
+              </svg>
+              <span>Sinkron dari Monev</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Metric Strip 4 Kolom -->
+        <div class="metrics-strip">
+          <div class="metric-chip">
+            <div class="metric-chip-icon success">
+              <svg class="lucide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="metric-chip-data">
+              <span class="metric-chip-val" id="dash-m-hadir">0 hari</span>
+              <span class="metric-chip-lbl" id="dash-m-hadir-pct">Masuk / Hadir (0%)</span>
+            </div>
+          </div>
+
+          <div class="metric-chip">
+            <div class="metric-chip-icon" style="background: #fffbeb; color: #b45309;">
+              <svg class="lucide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" x2="12" y1="8" y2="12"/>
+                <line x1="12" x2="12.01" y1="16" y2="16"/>
+              </svg>
+            </div>
+            <div class="metric-chip-data">
+              <span class="metric-chip-val" id="dash-m-absen">0 hari</span>
+              <span class="metric-chip-lbl" id="dash-m-absen-sub">0 Sakit &bull; 0 Izin &bull; 0 Alpha</span>
+            </div>
+          </div>
+
+          <div class="metric-chip">
+            <div class="metric-chip-icon">
+              <svg class="lucide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <div class="metric-chip-data">
+              <span class="metric-chip-val" id="dash-m-ready">0 laporan</span>
+              <span class="metric-chip-lbl" id="dash-m-ready-sub">Siap Ekspor (&ge; 100 char)</span>
+            </div>
+          </div>
+
+          <div class="metric-chip">
+            <div class="metric-chip-icon">
+              <svg class="lucide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+            </div>
+            <div class="metric-chip-data">
+              <span class="metric-chip-val" id="dash-m-tpl" style="font-size: 13px;">Template 1</span>
+              <span class="metric-chip-lbl" id="dash-m-ttd">TTD: Aktif</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-Column Dashboard Body -->
+        <div style="display: grid; grid-template-columns: 1.55fr 1fr; gap: 16px; align-items: stretch;">
+          <!-- Kiri: Lisensi & Proteksi Perangkat (Compact) -->
+          <div class="dash-card lic-card-compact" id="card-settings-license">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <h3 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Lisensi &amp; Proteksi Perangkat</h3>
+            </div>
+            <div class="lic-status-banner" id="lic-banner-box" style="display: none;">
+              <div class="lic-badge-lg" id="lic-main-status">BELUM AKTIF</div>
+              <p id="lic-main-msg">Lisensi belum diaktivasi pada perangkat ini.</p>
+            </div>
+
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span class="detail-label">Hardware Identifier</span>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <code id="opt-hw-fp" class="detail-val text-mono" style="font-size: 11px;">Memuat...</code>
+                  <button type="button" id="btn-copy-hw-fp" class="btn-copy-inline" title="Salin Hardware ID">Salin</button>
+                </div>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Pemilik Lisensi</span>
+                <span id="opt-lic-owner" class="detail-val" style="font-size: 12px;">-</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Label Perangkat</span>
+                <span id="opt-lic-device" class="detail-val" style="font-size: 12px;">-</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Masa Berlaku</span>
+                <span id="opt-lic-exp" class="detail-val" style="font-size: 12px;">-</span>
+              </div>
+            </div>
+
+            <div class="opt-meter-wrap" id="opt-lic-meter-wrap" style="display: none;">
+              <div class="opt-meter-bar">
+                <div class="opt-meter-fill" id="opt-lic-meter-fill" style="width: 100%;"></div>
+              </div>
+              <span class="opt-meter-txt" id="opt-lic-meter-txt">Memeriksa sisa masa aktif...</span>
+            </div>
+
+            <div class="lic-form-section">
+              <div class="btn-group" style="margin-top: 2px;">
+                <button type="button" id="btn-open-license-modal" class="btn btn-primary btn-sm">
+                  <span>Ubah Lisensi</span>
+                </button>
+                <button id="btn-verify-opt" class="btn btn-secondary btn-sm">
+                  <span>Sinkronkan Status</span>
+                </button>
+              </div>
+              <div id="post-activation-guide" style="display: none; margin-top: 8px; padding: 8px 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 11.5px; color: #1e3a8a; align-items: center; justify-content: space-between; gap: 8px;">
+                <span>Lisensi aktif! Login ke MonevHub agar periode &amp; riwayat otomatis tersinkron.</span>
+                <button type="button" id="btn-open-monevhub-login" class="btn btn-primary btn-sm" style="white-space: nowrap;">Buka &amp; Login MonevHub</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kanan: Aksi Cepat & Ekspor Langsung -->
+          <div class="dash-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Aksi Cepat &amp; Ekspor Dokumen</h3>
+              <p style="font-size: 12px; color: #64748b; margin-bottom: 12px; line-height: 1.45;">
+                Ekspor langsung data laporan siap cetak sesuai filter periode yang dipilih di atas dan template aktif.
+              </p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button id="btn-dash-export-pdf" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                <span>Ekspor PDF (Siap Cetak)</span>
+              </button>
+              <button id="btn-dash-export-docx" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                <span>Ekspor Word (.docx)</span>
+              </button>
+              <button id="btn-dash-goto-history" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                <span>Buka Log Riwayat &amp; Filter Detail</span>
+              </button>
+              <button id="btn-dash-goto-tpl" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                <span>Atur Template Laporan &amp; TTD</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full-Width: Tabel Rekap Absensi per Periode -->
+        <div class="dash-card" style="margin-top: 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <h3 style="font-size: 14px; font-weight: 700; color: #0f172a;">Rekap Absensi &amp; Kesiapan Ekspor per Periode</h3>
+            <span id="dash-summary-hint" style="font-size: 11px; color: #64748b;">Otomatis dari kalender MonevHub</span>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 44px; text-align: center;">No</th>
+                  <th>Periode</th>
+                  <th style="text-align: center;">Hadir</th>
+                  <th style="text-align: center;">Sakit</th>
+                  <th style="text-align: center;">Izin</th>
+                  <th style="text-align: center;">Alpha</th>
+                  <th style="text-align: center;">Libur</th>
+                  <th style="text-align: center;">Siap Ekspor</th>
+                  <th style="text-align: center; width: 185px;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="dash-period-tbody">
+                <tr>
+                  <td colspan="9" class="empty-state">Belum ada data periode. Klik "Sinkron dari Monev" atau buka tab Riwayat MonevHub.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      
+      <!-- VIEW 1: LOG RIWAYAT -->
+      <section id="view-history" class="dash-view">
+        <header class="view-header">
+          <div>
+            <h1>Log Riwayat Laporan</h1>
+            <p>Ekstrak laporan per periode atau rentang tanggal dari MonevHub, filter kehadiran, lalu ekspor ke PDF, Word, atau CSV.</p>
+          </div>
+          <div class="view-actions">
+            <button id="btn-extract-period-opt" class="btn btn-primary">
+              <svg class="lucide" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                <path d="M8 16H3v5"/>
+              </svg>
+              <span>Ekstrak dari Monev</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- 1. Card Informasi (Paling Atas) -->
+        <div class="metrics-strip">
+          <div class="metric-chip">
+            <div class="metric-chip-icon">
+              <svg class="lucide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <div class="metric-chip-data">
+              <span class="metric-chip-val" id="metric-total-logs">0</span>
+              <span class="metric-chip-lbl">Laporan Terfilter</span>
+            </div>
+          </div>
+          <div class="metric-chip">
+            <div class="metric-chip-icon success">
+              <svg class="lucide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="metric-chip-data">
+              <span class="metric-chip-val" id="metric-hadir-count">0</span>
+              <span class="metric-chip-lbl">Hari Hadir</span>
+            </div>
+          </div>
+          <div class="metric-chip">
+            <div class="metric-chip-icon success">
+              <svg class="lucide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+            </div>
+            <div class="metric-chip-data">
+              <span class="metric-chip-val" id="metric-avg-chars">0 char</span>
+              <span class="metric-chip-lbl">Rata-rata Uraian</span>
+            </div>
+          </div>
+          <div class="metric-chip">
+            <div class="metric-chip-icon">
+              <svg class="lucide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                <line x1="16" x2="16" y1="2" y2="6"/>
+                <line x1="8" x2="8" y1="2" y2="6"/>
+                <line x1="3" x2="21" y1="10" y2="10"/>
+              </svg>
+            </div>
+            <div class="metric-chip-data">
+              <span class="metric-chip-val" id="metric-active-range" style="font-size: 13px;">-</span>
+              <span class="metric-chip-lbl">Rentang Aktif</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Card Tabel + Toolbar Sejajar (Pencarian, Filter, Hapus, Ekspor) -->
+        <div class="dash-card">
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+              <input type="search" id="history-search-input" class="input-control" style="width: 250px; padding: 6px 11px; font-size: 12px;" placeholder="Cari tanggal atau kata kunci...">
+              <span id="history-filter-count" style="font-size: 12px; color: #475569; font-weight: 600;">Menampilkan 0 laporan</span>
+            </div>
+            <div class="btn-group">
+              <button type="button" id="btn-toggle-history-filter" class="btn btn-secondary btn-sm">
+                <span>Filter</span>
+              </button>
+              <button type="button" id="btn-open-delete-history-modal" class="btn btn-danger-outline btn-sm">
+                <span>Hapus</span>
+              </button>
+              <button type="button" id="btn-open-export-history-modal" class="btn btn-primary btn-sm">
+                <span>Ekspor</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Panel Filter Lipat (Muncul saat tombol Filter diklik) -->
+          <div id="history-filter-panel" style="display: none; margin-bottom: 14px; padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+            <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; align-items: end;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                  <label for="filter-mode" style="margin-bottom: 0;">Periode / Mode Filter</label>
+                  <button type="button" id="btn-sync-periods" class="btn-copy-inline" title="Baca otomatis semua periode dari tab MonevHub">Sinkron Periode</button>
+                </div>
+                <select id="filter-mode" class="input-control">
+                  <option value="custom" selected>Rentang Tanggal</option>
+                  <option value="all">Tampilkan Semua Data</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="filter-start-date">Tanggal Mulai</label>
+                <input type="date" id="filter-start-date" class="input-control">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="filter-end-date">Tanggal Sampai</label>
+                <input type="date" id="filter-end-date" class="input-control">
+              </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #334155; cursor: pointer;">
+                <input type="checkbox" id="filter-skip-holidays" checked>
+                <span>Abaikan Hari Libur</span>
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #334155; cursor: pointer;">
+                <input type="checkbox" id="filter-skip-absent" checked>
+                <span>Abaikan Izin / Sakit / Tidak Hadir</span>
+              </label>
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #334155; cursor: pointer;">
+                <input type="checkbox" id="filter-skip-empty" checked>
+                <span>Abaikan Belum Diisi</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 42px; text-align: center;">No</th>
+                  <th style="width: 145px;">Periode</th>
+                  <th style="width: 105px;">Tanggal</th>
+                  <th style="width: 90px;">Presensi</th>
+                  <th>Uraian Aktivitas (&ge;100)</th>
+                  <th>Pembelajaran (&ge;100)</th>
+                  <th>Kendala (&ge;100)</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <tr>
+                  <td colspan="7" class="empty-state">Belum ada riwayat laporan yang tersimpan.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: REKAP BULANAN -->
+      <section id="view-recap" class="dash-view">
+        <header class="view-header">
+          <div>
+            <h1>Rekapitulasi Bulanan</h1>
+            <p>Penyusunan laporan evaluasi bulanan terstruktur berbasis kecerdasan komputasi.</p>
+          </div>
+        </header>
+
+        <div class="dash-card">
+          <div class="form-row-recap">
+            <div class="form-group" style="flex: 1.3;">
+              <label for="recap-mode">Periode / Rentang Rekap</label>
+              <select id="recap-mode" class="input-control">
+                <option value="custom" selected>Rentang Tanggal</option>
+                <option value="all">Semua Data Tersimpan</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="recap-start-date">Tanggal Mulai</label>
+              <input type="date" id="recap-start-date" class="input-control">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="recap-end-date">Tanggal Sampai</label>
+              <input type="date" id="recap-end-date" class="input-control">
+            </div>
+            <button id="btn-do-recap" class="btn btn-primary" style="margin-top: 19px;">
+              <svg class="lucide" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              </svg>
+              <span>Susun Rekapitulasi</span>
+            </button>
+          </div>
+
+          <div id="recap-match-info" style="display: none; margin-top: 10px; font-size: 12px; color: #475569; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;"></div>
+          <div id="recap-error-box" style="display: none; margin-top: 10px; font-size: 12px; color: #991b1b; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px;"></div>
+
+          <div id="recap-result-wrapper" style="margin-top: 16px; display: none;">
+            <div class="result-header">
+              <label>Dokumen Hasil Analisis</label>
+              <div class="btn-group">
+                <button id="btn-copy-recap-opt" class="btn btn-secondary btn-sm">Salin Teks</button>
+                <button id="btn-download-recap-opt" class="btn btn-secondary btn-sm">Unduh TXT</button>
+              </div>
+            </div>
+            <textarea id="recap-result-text" class="textarea-control" rows="14"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: PENGATURAN TERPADU (AI + TAMPILAN + LISENSI) -->
+      <section id="view-settings" class="dash-view">
+        <header class="view-header">
+          <div>
+            <h1>Pengaturan Sistem</h1>
+            <p>Kelola integrasi AI, mode tampilan asisten, dan aktivasi lisensi perangkat dalam satu halaman.</p>
+          </div>
+        </header>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; align-items: start;">
+          <!-- CARD 1: KONFIGURASI AI -->
+          <div class="dash-card" id="card-settings-ai">
+            <h3 style="font-size: 14.5px; font-weight: 750; color: #0f172a; margin-bottom: 12px;">1. Integrasi AI (Trio Gateway)</h3>
+            <div class="form-group">
+              <label for="opt-ai-mode">Pilihan Metode Penggunaan AI</label>
+              <select id="opt-ai-mode" class="input-control font-semibold">
+                <option value="injected" selected>1. Injeksi Langsung dari Pembuat (Siap Pakai)</option>
+                <option value="api_key">2. Kunci API Mandiri (Gemini Gratis / OpenAI / Groq)</option>
+                <option value="oauth">3. Akun AI Pribadi / OAuth Bearer Token</option>
+              </select>
+            </div>
+
+            <!-- OPSI 1: INJEKSI DARI PEMBUAT -->
+            <div id="box-injected-opt" class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg mb-3">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="user-badge valid">SIAP PAKAI &amp; TERPROTEKSI</span>
+                <span class="text-xs font-semibold text-emerald-900">Master AI Server</span>
+              </div>
+              <p class="text-xs text-emerald-800 leading-relaxed mb-3">
+                Layanan AI &amp; pemilihan model diatur langsung dari sheet <strong>AI_KEYS</strong> di Google Spreadsheet server lisensi.
+              </p>
+              <div class="form-group mb-0">
+                <label for="opt-injected-url" class="text-xs text-slate-700">Endpoint Server (Opsional)</label>
+                <input type="url" id="opt-injected-url" class="input-control text-mono text-xs" placeholder="Default terintegrasi ke server lisensi">
+              </div>
+            </div>
+
+            <!-- OPSI 2: UNIVERSAL API KEY GATEWAY -->
+            <div id="box-apikey-opt" style="display: none;">
+              <div class="form-group">
+                <label for="opt-api-gateway">Penyedia / Gateway AI</label>
+                <select id="opt-api-gateway" class="input-control">
+                  <option value="gemini" selected>Google Gemini (Gratis di AI Studio)</option>
+                  <option value="openai">OpenAI Official (GPT-4o / GPT-4o-mini)</option>
+                  <option value="deepseek">DeepSeek AI (DeepSeek-Chat)</option>
+                  <option value="groq">Groq Cloud (Llama 3.3 70B - Ultra Fast)</option>
+                  <option value="custom">Custom OpenAI-Compatible (OpenRouter, Ollama)</option>
+                </select>
+              </div>
+
+              <div class="form-group" id="group-base-url" style="display: none;">
+                <label for="opt-api-base-url">Base URL Gateway</label>
+                <input type="url" id="opt-api-base-url" class="input-control text-mono" placeholder="https://api.openai.com/v1">
+              </div>
+
+              <div class="form-group">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                  <label for="opt-api-key" style="margin-bottom: 0;">Kunci API (API Key)</label>
+                  <div style="display: flex; gap: 6px;">
+                    <button type="button" id="btn-get-gemini-key" class="btn-copy-inline" style="background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe;" title="Buka Google AI Studio untuk membuat API Key gratis">Get API Key</button>
+                    <button type="button" id="btn-paste-api-key" class="btn-copy-inline" title="Tempel API Key dari clipboard">Tempel</button>
+                  </div>
+                </div>
+                <input type="password" id="opt-api-key" class="input-control text-mono" placeholder="Masukkan API Key (AIza... atau sk-...)">
+                <span class="hint-text">Klik <strong>Get API Key</strong> &rarr; buat key di AI Studio &rarr; salin lalu klik <strong>Tempel</strong>.</span>
+              </div>
+
+              <div class="form-group">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                  <label for="opt-api-model" style="margin-bottom: 0;">Pilih Model</label>
+                  <button type="button" id="btn-fetch-gemini-models" class="btn-copy-inline" title="Ambil daftar model tersedia langsung dari provider AI">Muat Model Tersedia</button>
+                </div>
+                <select id="opt-gemini-model-select" class="input-control text-mono" style="margin-bottom: 6px;">
+                  <option value="gemini-2.5-flash">gemini-2.5-flash (Gratis Default - Seimbang)</option>
+                  <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite (Gratis Ultra Cepat)</option>
+                  <option value="gemini-2.5-pro">gemini-2.5-pro (Penalaran Kompleks)</option>
+                  <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (Generasi Terbaru)</option>
+                </select>
+                <input type="text" id="opt-api-model" class="input-control text-mono" placeholder="gemini-2.5-flash / gpt-4o-mini">
+                <span id="gemini-models-status" class="hint-text"></span>
+              </div>
+            </div>
+
+            <!-- OPSI 3: OAUTH / AKUN PRIBADI -->
+            <div id="box-oauth-opt" style="display: none;">
+              <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-3">
+                <span class="text-xs font-semibold text-blue-900 block mb-1">Koneksi Sesi Pribadi / OAuth Bearer Token</span>
+                <p class="text-xs text-blue-800 leading-relaxed">
+                  Gunakan Bearer Token sesi akun AI Anda untuk pemanggilan API langsung.
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="opt-oauth-token">Bearer Token / Sesi Token</label>
+                <input type="password" id="opt-oauth-token" class="input-control text-mono" placeholder="Bearer ya29... / session token">
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+              <button type="button" id="btn-test-ai-conn" class="btn btn-secondary" style="flex: 1; justify-content: center;">
+                <span>Tes Koneksi AI</span>
+              </button>
+              <button id="btn-save-ai-opt" class="btn btn-primary" style="flex: 1; justify-content: center;">
+                <span>Simpan Konfigurasi AI</span>
+              </button>
+            </div>
+            <div id="ai-test-result" style="display: none; margin-top: 8px; font-size: 11.5px; padding: 7px 10px; border-radius: 6px; line-height: 1.4;"></div>
+          </div>
+
+          <!-- CARD 2: TAMPILAN & WIDGET -->
+          <div class="dash-card" id="card-settings-display">
+            <h3 style="font-size: 14.5px; font-weight: 750; color: #0f172a; margin-bottom: 12px;">2. Mode Tampilan Asisten</h3>
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg mb-4">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-slate-800 text-sm">Widget Melayang di Web Monev</span>
+                  <span id="opt-widget-status-badge" class="user-badge valid">AKTIF</span>
+                </div>
+                <label class="mh-checkbox-label">
+                  <input type="checkbox" id="opt-toggle-floating-widget" checked>
+                  <span class="mh-checkbox-custom">
+                    <svg class="lucide check-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </span>
+                </label>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed" id="opt-widget-status-desc">
+                Ketika diaktifkan, bubble melayang <strong>MonevHub</strong> akan tampil di halaman web MonevHub. Jika dimatikan, gunakan <strong>Bilah Samping (Side Panel)</strong> di sebelah kanan browser.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div class="p-3 border border-slate-200 rounded-md bg-white">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <div class="w-2 h-2 rounded-full bg-emerald-600"></div>
+                  <span class="font-semibold text-xs text-slate-800">Widget Melayang</span>
+                </div>
+                <ul class="text-xs text-slate-500 pl-4 list-disc space-y-1">
+                  <li>Bubble &amp; mini-panel geser bebas</li>
+                  <li>Isi form langsung di halaman web</li>
+                </ul>
+              </div>
+              <div class="p-3 border border-slate-200 rounded-md bg-white">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <div class="w-2 h-2 rounded-full bg-blue-600"></div>
+                  <span class="font-semibold text-xs text-slate-800">Bilah Samping (Side Panel)</span>
+                </div>
+                <ul class="text-xs text-slate-500 pl-4 list-disc space-y-1">
+                  <li>Bubble melayang disembunyikan</li>
+                  <li>Panel menempel permanen di kanan</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Pengaturan Lokasi Default -->
+            <div style="margin-top: 14px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 14px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 6px; flex-wrap: wrap;">
+                <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: #0f172a; margin: 0; cursor: pointer;">
+                  <input type="checkbox" id="opt-loc-enabled" checked>
+                  <span>Kirim Data Lokasi Saat Isi Laporan</span>
+                </label>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" id="btn-opt-open-map" class="btn-copy-inline" style="background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe;">Set Lokasi di Peta</button>
+                  <button type="button" id="btn-opt-get-gps" class="btn-copy-inline">Ambil GPS Sekarang</button>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="opt-loc-lat">Latitude Default</label>
+                  <input type="text" id="opt-loc-lat" class="input-control text-mono" placeholder="-6.200000">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="opt-loc-lng">Longitude Default</label>
+                  <input type="text" id="opt-loc-lng" class="input-control text-mono" placeholder="106.816666">
+                </div>
+              </div>
+              <span class="hint-text">Digunakan otomatis bila GPS laptop/PC kurang akurat. Bisa diubah langsung dari Sidebar atau Floating Widget.</span>
+            </div>
+
+            <button id="btn-save-display-opt" class="btn btn-primary" style="width: 100%; justify-content: center;">
+              <span>Simpan Pengaturan Tampilan &amp; Lokasi</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4B: TEMPLATE & TTD EKSPOR -->
+      <section id="view-export-tpl" class="dash-view">
+        <header class="view-header">
+          <div>
+            <h1>Template Laporan &amp; Tanda Tangan (PDF / Word)</h1>
+            <p>Pilih format tabel ekspor, lengkapi identitas logbook, dan sesuaikan blok tanda tangan di akhir dokumen.</p>
+          </div>
+          <div class="view-actions">
+            <button id="btn-save-export-tpl" class="btn btn-primary">
+              <span>Simpan Pengaturan Ekspor</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Pilihan Template -->
+        <div class="dash-card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">1. Pilih Template Laporan Ekspor</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">
+            <label class="tpl-option-card" style="display: flex; gap: 10px; padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+              <input type="radio" name="exp-template" value="tpl1" checked style="margin-top: 3px;">
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #0f172a;">Template 1 — Standar MonevHub</div>
+                <p style="font-size: 11.5px; color: #475569; margin-top: 4px; line-height: 1.4;">
+                  <strong>Kolom Tabel:</strong> (No, Tanggal, Kehadiran, Uraian Aktivitas, Pembelajaran yang Diperoleh, Kendala yang Dialami) + Blok TTD.
+                </p>
+              </div>
+            </label>
+
+            <label class="tpl-option-card" style="display: flex; gap: 10px; padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+              <input type="radio" name="exp-template" value="tpl2" style="margin-top: 3px;">
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #0f172a;">Template 2 — Logbook Kegiatan Instansi</div>
+                <p style="font-size: 11.5px; color: #475569; margin-top: 4px; line-height: 1.4;">
+                  <strong>Header:</strong> (Nama, Instansi, Bagian/Unit, Bulan).<br>
+                  <strong>Kolom Tabel:</strong> (No, Hari/Tanggal, Waktu, Uraian Kegiatan, Output/Hasil) + Blok TTD.
+                </p>
+              </div>
+            </label>
+
+            <label class="tpl-option-card" style="display: flex; gap: 10px; padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+              <input type="radio" name="exp-template" value="tpl3" style="margin-top: 3px;">
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #0f172a;">Template 3 — Ringkas Kinerja &amp; Kendala</div>
+                <p style="font-size: 11.5px; color: #475569; margin-top: 4px; line-height: 1.4;">
+                  <strong>Header:</strong> (Nama, Instansi, Bagian/Unit, Periode).<br>
+                  <strong>Kolom Tabel:</strong> (No, Hari/Tanggal, Kehadiran, Uraian Kegiatan, Kendala &amp; Catatan) + Blok TTD.
+                </p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Identitas & Jam Kerja -->
+        <div class="dash-card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">2. Identitas &amp; Jam Kerja Logbook (Untuk Header &amp; Kolom Waktu)</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-peserta-nama">Nama Peserta</label>
+              <input type="text" id="exp-peserta-nama" class="input-control" placeholder="Contoh: Dina Juliana">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-instansi">Nama Instansi / Tempat Magang</label>
+              <input type="text" id="exp-instansi" class="input-control" placeholder="Contoh: UPTD Puskesmas Cipicung">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-unit">Bagian / Unit Kerja</label>
+              <input type="text" id="exp-unit" class="input-control" placeholder="Contoh: IT / Subbag Tata Usaha">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-bulan-label">Label Bulan / Periode (Opsional)</label>
+              <input type="text" id="exp-bulan-label" class="input-control" placeholder="Kosong = otomatis sesuai filter">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-waktu-sk">Jam Kerja (Senin – Kamis)</label>
+              <input type="text" id="exp-waktu-sk" class="input-control" value="07.15 – 14.15">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-waktu-jumat">Jam Kerja (Jumat)</label>
+              <input type="text" id="exp-waktu-jumat" class="input-control" value="07.15 – 13.00">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-waktu-sabtu">Jam Kerja (Sabtu)</label>
+              <input type="text" id="exp-waktu-sabtu" class="input-control" value="07.15 – 12.30">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-orientation">Orientasi Kertas (Default A4)</label>
+              <select id="exp-orientation" class="input-control">
+                <option value="landscape" selected>Landscape (A4 Mendatar)</option>
+                <option value="portrait">Portrait (A4 Tegak)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blok Tanda Tangan (TTD) -->
+        <div class="dash-card">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
+            <h3 style="font-size: 14px; font-weight: 700; color: #0f172a;">3. Blok Tanda Tangan (TTD) Akhir Dokumen</h3>
+            <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #0f172a; cursor: pointer;">
+              <input type="checkbox" id="exp-show-signature" checked>
+              <span>Tampilkan Blok TTD di Akhir PDF &amp; Word</span>
+            </label>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-ttd-kota">Kota Pengesahan</label>
+              <input type="text" id="exp-ttd-kota" class="input-control" placeholder="Contoh: Kuningan">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="exp-ttd-tanggal">Tanggal TTD (Opsional)</label>
+              <input type="text" id="exp-ttd-tanggal" class="input-control" placeholder="Kosong = tanggal hari ini">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
+            <!-- TTD 1 (Kiri - Pimpinan) -->
+            <div style="padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;">
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: #1e3a8a; margin-bottom: 8px; cursor: pointer;">
+                <input type="checkbox" id="ttd1-enabled" checked>
+                <span>Pihak 1 (Kiri)</span>
+              </label>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd1-alt">Label Peran / Alt Text</label>
+                <textarea id="ttd1-alt" class="input-control" rows="2" placeholder="Mengetahui,&#10;Pimpinan Instansi"></textarea>
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd1-jabatan">Jabatan</label>
+                <input type="text" id="ttd1-jabatan" class="input-control" placeholder="Kepala Puskesmas / Direktur">
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd1-nama">Nama Lengkap</label>
+                <input type="text" id="ttd1-nama" class="input-control" placeholder="Nama Pimpinan">
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd1-nip">NIP / NIK (Opsional)</label>
+                <input type="text" id="ttd1-nip" class="input-control" placeholder="Kosongkan jika tidak perlu">
+              </div>
+              <div style="padding-top: 8px; border-top: 1px dashed #cbd5e1;">
+                <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #334155; cursor: pointer; margin-bottom: 6px;">
+                  <input type="checkbox" id="ttd1-use-img">
+                  <span>Sertakan Gambar TTD (PNG)</span>
+                </label>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <input type="file" id="ttd1-img-file" accept="image/png" style="font-size: 11px; max-width: 175px;">
+                  <button type="button" id="ttd1-img-clear" class="btn-copy-inline" style="display: none;">Hapus</button>
+                </div>
+                <img id="ttd1-img-preview" alt="Preview TTD 1" style="display: none; max-height: 44px; margin-top: 6px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; padding: 2px;">
+              </div>
+            </div>
+
+            <!-- TTD 2 (Tengah - Mentor) -->
+            <div style="padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;">
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: #1e3a8a; margin-bottom: 8px; cursor: pointer;">
+                <input type="checkbox" id="ttd2-enabled" checked>
+                <span>Pihak 2 (Tengah)</span>
+              </label>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd2-alt">Label Peran / Alt Text</label>
+                <textarea id="ttd2-alt" class="input-control" rows="2" placeholder="Pembimbing Lapangan / Mentor"></textarea>
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd2-jabatan">Jabatan</label>
+                <input type="text" id="ttd2-jabatan" class="input-control" placeholder="Mentor MagangHub">
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd2-nama">Nama Lengkap</label>
+                <input type="text" id="ttd2-nama" class="input-control" placeholder="Nama Mentor">
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd2-nip">NIP / NIK (Opsional)</label>
+                <input type="text" id="ttd2-nip" class="input-control" placeholder="Kosongkan jika tidak perlu">
+              </div>
+              <div style="padding-top: 8px; border-top: 1px dashed #cbd5e1;">
+                <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #334155; cursor: pointer; margin-bottom: 6px;">
+                  <input type="checkbox" id="ttd2-use-img">
+                  <span>Sertakan Gambar TTD (PNG)</span>
+                </label>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <input type="file" id="ttd2-img-file" accept="image/png" style="font-size: 11px; max-width: 175px;">
+                  <button type="button" id="ttd2-img-clear" class="btn-copy-inline" style="display: none;">Hapus</button>
+                </div>
+                <img id="ttd2-img-preview" alt="Preview TTD 2" style="display: none; max-height: 44px; margin-top: 6px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; padding: 2px;">
+              </div>
+            </div>
+
+            <!-- TTD 3 (Kanan - Peserta) -->
+            <div style="padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc;">
+              <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: #1e3a8a; margin-bottom: 8px; cursor: pointer;">
+                <input type="checkbox" id="ttd3-enabled" checked>
+                <span>Pihak 3 (Kanan)</span>
+              </label>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd3-alt">Label Peran / Alt Text</label>
+                <textarea id="ttd3-alt" class="input-control" rows="2" placeholder="Peserta Magang"></textarea>
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd3-jabatan">Jabatan</label>
+                <input type="text" id="ttd3-jabatan" class="input-control" placeholder="Peserta Program MagangHub">
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd3-nama">Nama Lengkap</label>
+                <input type="text" id="ttd3-nama" class="input-control" placeholder="Nama Peserta">
+              </div>
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label for="ttd3-nip">NIP / NIK (Opsional)</label>
+                <input type="text" id="ttd3-nip" class="input-control" placeholder="Kosongkan jika tidak perlu">
+              </div>
+              <div style="padding-top: 8px; border-top: 1px dashed #cbd5e1;">
+                <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #334155; cursor: pointer; margin-bottom: 6px;">
+                  <input type="checkbox" id="ttd3-use-img">
+                  <span>Sertakan Gambar TTD (PNG)</span>
+                </label>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <input type="file" id="ttd3-img-file" accept="image/png" style="font-size: 11px; max-width: 175px;">
+                  <button type="button" id="ttd3-img-clear" class="btn-copy-inline" style="display: none;">Hapus</button>
+                </div>
+                <img id="ttd3-img-preview" alt="Preview TTD 3" style="display: none; max-height: 44px; margin-top: 6px; border: 1px solid #e2e8f0; border-radius: 4px; background: #fff; padding: 2px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    </div>
+  </div>
+
+  <!-- MODAL: UBAH / AKTIVASI LISENSI -->
+  <div id="modal-license-edit" class="mh-modal-backdrop" role="dialog" aria-modal="true">
+    <div class="mh-modal-card">
+      <div class="mh-modal-header">
+        <h3>Aktivasi / Ubah Lisensi Perangkat</h3>
+        <button type="button" id="btn-close-license-modal" class="mh-modal-close" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="opt-input-key">Kunci Lisensi</label>
+        <input type="text" id="opt-input-key" class="input-control text-mono uppercase" placeholder="MH-XXXX-XXXX-XXXX">
+      </div>
+      <div class="form-group">
+        <label for="opt-user-name">Nama Pemilik (Personal)</label>
+        <input type="text" id="opt-user-name" class="input-control" placeholder="Nama Anda">
+      </div>
+      <div class="form-group">
+        <label for="opt-device-label">Nama Perangkat</label>
+        <input type="text" id="opt-device-label" class="input-control" placeholder="Laptop Kerja">
+      </div>
+      <div class="btn-group" style="justify-content: flex-end; margin-top: 14px;">
+        <button type="button" id="btn-cancel-license-modal" class="btn btn-secondary btn-sm">Batal</button>
+        <button type="button" id="btn-activate-opt" class="btn btn-primary btn-sm">
+          <span>Simpan &amp; Aktivasi</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EKSPOR LAPORAN PER PERIODE -->
+  <div id="modal-export-period" class="mh-modal-backdrop" role="dialog" aria-modal="true">
+    <div class="mh-modal-card">
+      <div class="mh-modal-header">
+        <h3>Ekspor Laporan Periode</h3>
+        <button type="button" id="btn-close-export-modal" class="mh-modal-close" aria-label="Tutup">&times;</button>
+      </div>
+      <p id="exp-modal-period-label" style="font-size: 12px; color: #475569; margin-bottom: 12px; font-weight: 600;">-</p>
+      <div class="form-group">
+        <label for="exp-modal-format">Format Dokumen</label>
+        <select id="exp-modal-format" class="input-control">
+          <option value="pdf" selected>PDF (Siap Cetak)</option>
+          <option value="docx">Microsoft Word (.docx)</option>
+          <option value="csv">CSV (.csv)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exp-modal-template">Pilihan Variant Template</label>
+        <select id="exp-modal-template" class="input-control">
+          <option value="tpl1">Template 1: Standar MonevHub</option>
+          <option value="tpl2">Template 2: Logbook Instansi</option>
+          <option value="tpl3">Template 3: Ringkas &amp; Kendala</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exp-modal-orientation">Orientasi Kertas (A4)</label>
+        <select id="exp-modal-orientation" class="input-control">
+          <option value="landscape" selected>Landscape (A4 Mendatar)</option>
+          <option value="portrait">Portrait (A4 Tegak)</option>
+        </select>
+      </div>
+      <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #1e293b; cursor: pointer; margin-top: 6px; padding: 8px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+        <input type="checkbox" id="exp-modal-include-recap">
+        <span>Sertakan Rekapitulasi Bulanan (AI) di akhir dokumen</span>
+      </label>
+      <div class="btn-group" style="justify-content: flex-end; margin-top: 16px;">
+        <button type="button" id="btn-cancel-export-modal" class="btn btn-secondary btn-sm">Batal</button>
+        <button type="button" id="btn-confirm-export-period" class="btn btn-primary btn-sm">
+          <span>Ekspor Sekarang</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: HAPUS LOG RIWAYAT -->
+  <div id="modal-delete-history" class="mh-modal-backdrop" role="dialog" aria-modal="true">
+    <div class="mh-modal-card">
+      <div class="mh-modal-header">
+        <h3>Hapus Log Riwayat</h3>
+        <button type="button" id="btn-close-delete-modal" class="mh-modal-close" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="form-group">
+        <label for="delete-history-scope">Pilih Cakupan Penghapusan</label>
+        <select id="delete-history-scope" class="input-control">
+          <option value="all" selected>Hapus Semua Periode (Seluruh Data Lokal)</option>
+        </select>
+      </div>
+      <p style="font-size: 11.5px; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; padding: 8px 10px; border-radius: 6px; line-height: 1.45;">
+        Data riwayat lokal yang dihapus dapat diekstrak ulang kapan saja dari halaman Riwayat MonevHub.
+      </p>
+      <div class="btn-group" style="justify-content: flex-end; margin-top: 14px;">
+        <button type="button" id="btn-cancel-delete-modal" class="btn btn-secondary btn-sm">Batal</button>
+        <button type="button" id="btn-confirm-delete-history" class="btn btn-danger-outline btn-sm">
+          <span>Hapus Data</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PILIH LOKASI DI PETA / GOOGLE MAPS -->
+  <div id="modal-map-picker" class="mh-modal-backdrop" role="dialog" aria-modal="true">
+    <div class="mh-modal-card" style="max-width: 520px;">
+      <div class="mh-modal-header">
+        <h3>Pilih Lokasi Laporan</h3>
+        <button type="button" id="btn-close-map-modal" class="mh-modal-close" aria-label="Tutup">&times;</button>
+      </div>
+
+      <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+        <input type="text" id="map-search-input" class="input-control" placeholder="Cari nama tempat / instansi / kota...">
+        <button type="button" id="btn-map-search" class="btn btn-secondary btn-sm">Cari</button>
+      </div>
+      <div id="map-search-results" style="display: none; max-height: 110px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; background: #fff; font-size: 11.5px;"></div>
+
+      <div style="display: flex; gap: 6px; margin-bottom: 10px; align-items: center;">
+        <input type="text" id="map-gmaps-url" class="input-control text-mono" placeholder="Atau tempel link Google Maps (misal @-6.98,108.48)">
+        <button type="button" id="btn-toggle-gmaps-iframe" class="btn btn-secondary btn-sm" style="white-space: nowrap;">Lihat di Maps</button>
+        <button type="button" id="btn-open-gmaps-tab" class="btn btn-secondary btn-sm" style="white-space: nowrap;">Buka Tab</button>
+      </div>
+
+      <div style="position: relative; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #e2e8f0;">
+        <canvas id="map-picker-canvas" width="476" height="240" style="display: block; width: 100%; height: 240px; cursor: grab;"></canvas>
+        <iframe id="map-gmaps-iframe" style="display: none; width: 100%; height: 240px; border: 0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div id="map-zoom-controls" style="position: absolute; right: 8px; bottom: 8px; display: flex; flex-direction: column; gap: 4px;">
+          <button type="button" id="btn-map-zoom-in" class="btn btn-secondary btn-sm" style="padding: 2px 9px; font-weight: 700;">+</button>
+          <button type="button" id="btn-map-zoom-out" class="btn btn-secondary btn-sm" style="padding: 2px 9px; font-weight: 700;">-</button>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; font-size: 11.5px; color: #334155;">
+        <span>Klik/geser peta untuk arahkan pin merah.</span>
+        <code id="map-picked-coords" class="text-mono" style="font-weight: 700;">-6.200000, 106.816666</code>
+      </div>
+
+      <div class="btn-group" style="justify-content: flex-end; margin-top: 12px;">
+        <button type="button" id="btn-cancel-map-modal" class="btn btn-secondary btn-sm">Batal</button>
+        <button type="button" id="btn-map-save" class="btn btn-primary btn-sm">
+          <span>Simpan Lokasi</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="dash-toast" class="dash-toast"></div>
+
+  <script src="../lib/vendor/jspdf.umd.min.js"></script>
+  <script src="../lib/vendor/jspdf.plugin.autotable.min.js"></script>
+  <script src="../lib/vendor/docx.iife.js"></script>
+  <script src="../lib/license.js"></script>
+  <script src="../lib/ai.js"></script>
+  <script src="../lib/export.js"></script>
+  <script src="../lib/map-picker.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
