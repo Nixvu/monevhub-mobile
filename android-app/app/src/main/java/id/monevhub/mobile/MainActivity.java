@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         settings.setDatabaseEnabled(true);
         settings.setGeolocationEnabled(true);
         settings.setAllowFileAccess(false);
-        settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        settings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
 
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
@@ -70,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                String reqUrl = request.getUrl().toString();
+                if (reqUrl.startsWith("http://account.kemnaker.go.id")) {
+                    view.loadUrl(reqUrl.replaceFirst("^http://", "https://"));
+                    return true;
+                }
                 return false;
             }
 
