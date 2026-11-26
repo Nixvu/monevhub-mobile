@@ -1456,7 +1456,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function loadAiConfig() {
     const cfg = await MonevHubAI.getConfig();
-    if (optAiMode) optAiMode.value = cfg.mode || 'injected';
+    let effectiveMode = cfg.mode || 'injected';
+    if (effectiveMode === 'api_key' && !(cfg.apiKey || '').trim()) effectiveMode = 'injected';
+    if (effectiveMode === 'oauth' && !(cfg.oauthToken || '').trim()) effectiveMode = 'injected';
+    if (optAiMode) optAiMode.value = effectiveMode;
     if (optInjectedUrl) optInjectedUrl.value = cfg.gasWebhookUrl || '';
     if (optApiGateway) optApiGateway.value = cfg.gateway || 'gemini';
     if (optApiBaseUrl) optApiBaseUrl.value = cfg.baseUrl || '';
@@ -1772,7 +1775,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         optInputKey.value = lic.key || '';
         optUserName.value = lic.userName || lic.owner || '';
-        optDeviceLabel.value = lic.deviceName || '';
+        optDeviceLabel.value = lic.deviceName || MonevHubLicense.detectDeviceLabel();
 
         // Update License Expiry Meter
         const meterWrap = document.getElementById('opt-lic-meter-wrap');
@@ -1807,8 +1810,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         sideUserName.textContent = 'Belum Terdaftar';
 
         optLicOwner.textContent = '-';
-        optLicDevice.textContent = '-';
+        optLicDevice.textContent = MonevHubLicense.detectDeviceLabel();
         optLicExp.textContent = '-';
+        if (optDeviceLabel) optDeviceLabel.value = MonevHubLicense.detectDeviceLabel();
 
         const meterWrap = document.getElementById('opt-lic-meter-wrap');
         if (meterWrap) meterWrap.style.display = 'none';

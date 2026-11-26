@@ -2,9 +2,15 @@ package id.monevhub.mobile;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
@@ -21,8 +27,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,18 +96,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        webView.loadUrl(TARGET_URL);
+        String initialUrl = getIntent() != null && getIntent().getBooleanExtra("open_riwayat", false)
+                ? "https://monev.maganghub.kemnaker.go.id/riwayat"
+                : TARGET_URL;
+        webView.loadUrl(initialUrl);
+        ReminderReceiver.scheduleNext(this);
     }
 
     private void injectMonevScript() {
-        String js = loadAssetScript("monevhub-mobile-inject.js");
-        if (js != null && !js.isEmpty()) {
-            webView.evaluateJavascript(js, null);
+        String polyfill = "(function(){if(!window.chrome)window.chrome={};if(!window.chrome.storage){window.chrome.storage={local:{get:function(keys){return new Promise(function(res){var out={};var arr=Array.isArray(keys)?keys:(typeof keys==='string'?[keys]:Object.keys(keys||{}));for(var i=0;i<arr.length;i++){var k=arr[i];var raw=window.AndroidBridge?window.AndroidBridge.getStorageItem(k):localStorage.getItem(k);if(raw){try{out[k]=JSON.parse(raw);}catch(e){out[k]=raw;}}}res(out);});},set:function(obj){return new Promise(function(res){var ks=Object.keys(obj||{});for(var i=0;i<ks.length;i++){var k=ks[i];var v=JSON.stringify(obj[k]);if(window.AndroidBridge)window.AndroidBridge.setStorageItem(k,v);else localStorage.setItem(k,v);}res();});}}};}})();";
+        webView.evaluateJavascript(polyfill, null);
+
+        String[] assets = {
+            "lib/license.js",
+            "lib/humanizer.js",
+            "lib/ai.js",
+            "lib/vendor/jspdf.umd.min.js",
+            "lib/vendor/jspdf.plugin.autotable.min.js",
+            "lib/vendor/docx.iife.js",
+            "lib/export.js",
+            "lib/map-picker.js",
+            "monevhub-mobile-inject.js"
+        };
+        for (String asset : assets) {
+            String js = loadAssetScript(asset);
+            if (js != null && !js.isEmpty()) {
+                webView.evaluateJavascript(js, null);
+            }
         }
     }
 
     private String loadAssetScript(String filename) {
-        if (injectScriptCache != null) return injectScriptCache;
         try {
             InputStream is = getAssets().open(filename);
             BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
@@ -108,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 sb.append(line).append('\n');
             }
             br.close();
-            injectScriptCache = sb.toString();
-            return injectScriptCache;
+            return sb.toString();
         } catch (Exception e) {
             return "";
         }
@@ -161,6 +188,87 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class AndroidBridge {
+        @JavascriptInterface
+        public String getDeviceLabel() {
+            String m = Build.MANUFACTURER != null ? Build.MANUFACTURER : "";
+            String mod = Build.MODEL != null ? Build.MODEL : "Android";
+            return ("HP - " + m + " " + mod).trim();
+        }
+
+        @JavascriptInterface
+        public String getStorageItem(String key) {
+            SharedPreferences prefs = getSharedPreferences("monevhub_prefs", MODE_PRIVATE);
+            return prefs.getString(key, "");
+        }
+
+        @JavascriptInterface
+        public void setStorageItem(String key, String jsonVal) {
+            SharedPreferences prefs = getSharedPreferences("monevhub_prefs", MODE_PRIVATE);
+            prefs.edit().putString(key, jsonVal).apply();
+        }
+
+        @JavascriptInterface
+        public void saveFileBase64(String filename, String mimeType, String base64Data) {
+            try {
+                byte[] bytes = Base64.decode(base64Data, Base64.DEFAULT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Downloads.DISPLAY_NAME, filename);
+                    values.put(MediaStore.Downloads.MIME_TYPE, mimeType);
+                    values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+                    Uri uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+                    if (uri != null) {
+                        try (OutputStream os = getContentResolver().openOutputStream(uri)) {
+                            if (os != null) os.write(bytes);
+                        }
+                    }
+                } else {
+                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    if (!dir.exists()) dir.mkdirs();
+                    File out = new File(dir, filename);
+                    try (FileOutputStream fos = new FileOutputStream(out)) {
+                        fos.write(bytes);
+                    }
+                }
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Tersimpan di Downloads: " + filename, Toast.LENGTH_LONG).show());
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Gagal simpan file: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            }
+        }
+
+        @JavascriptInterface
+        public void setParticipantName(String name) {
+            if (name == null || name.trim().isEmpty()) return;
+            SharedPreferences prefs = getSharedPreferences("monevhub_prefs", MODE_PRIVATE);
+            prefs.edit().putString("participant_name", name.trim()).apply();
+        }
+
+        @JavascriptInterface
+        public void setTodayReportStatus(String dateStr, boolean isFilled) {
+            SharedPreferences prefs = getSharedPreferences("monevhub_prefs", MODE_PRIVATE);
+            if (isFilled && dateStr != null && !dateStr.isEmpty()) {
+                prefs.edit().putString("last_reported_date", dateStr).apply();
+            }
+        }
+
+        @JavascriptInterface
+        public void configureReminder(boolean enabled, int hour, int minute) {
+            SharedPreferences prefs = getSharedPreferences("monevhub_prefs", MODE_PRIVATE);
+            prefs.edit()
+                .putBoolean("reminder_enabled", enabled)
+                .putInt("reminder_hour", hour)
+                .putInt("reminder_minute", minute)
+                .apply();
+            ReminderReceiver.scheduleDailyReminder(MainActivity.this, enabled, hour, minute);
+        }
+
+        @JavascriptInterface
+        public void triggerTestNotification() {
+            SharedPreferences prefs = getSharedPreferences("monevhub_prefs", MODE_PRIVATE);
+            String name = prefs.getString("participant_name", "Peserta MagangHub");
+            ReminderReceiver.showReminderNotification(MainActivity.this, name);
+        }
+
         @JavascriptInterface
         public String checkPermissions() {
             boolean gps = hasLocationPermission();

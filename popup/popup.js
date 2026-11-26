@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const fp = await MonevHubLicense.getHardwareFingerprint();
     if (gateHwFp) gateHwFp.textContent = fp;
     if (licHwFp) licHwFp.textContent = fp;
+    if (gateDeviceName) gateDeviceName.value = MonevHubLicense.detectDeviceLabel();
 
     const res = await MonevHubLicense.verify(false);
     if (res.valid && res.data && res.data.active) {

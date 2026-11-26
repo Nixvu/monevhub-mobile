@@ -1,6 +1,6 @@
 /**
  * MonevHub Content Script - In-Page Automation & Floating Modal Assistant
- * Khusus Form Laporan Harian MagangHub Kemnaker (Vuetify / Vue 3)
+ * Form Laporan Harian & Logbook Asisten (Vuetify / Vue 3)
  */
 (function() {
   'use strict';
@@ -174,28 +174,23 @@
   function initFloatingWidget() {
     if (document.getElementById('monevhub-float-widget')) return;
 
+    const iconUrl = (typeof chrome !== 'undefined' && chrome.runtime?.getURL) ? chrome.runtime.getURL('icons/icon48.png') : '';
     const widget = document.createElement('div');
     widget.id = 'monevhub-float-widget';
     widget.innerHTML = `
-      <button class="mh-bubble" id="mh-btn-open-popup" title="Buka Asisten MonevHub (Geser untuk pindah posisi)">
-        <svg class="lucide" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-          <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-          <path d="M10 9H8"/>
-          <path d="M16 13H8"/>
-          <path d="M16 17H8"/>
-        </svg>
+      <button class="mh-bubble" id="mh-btn-open-popup" title="Buka Asisten MonevHub (Geser untuk pindah posisi)" style="padding:0;overflow:hidden;background:transparent;">
+        ${iconUrl ? `<img src="${iconUrl}" alt="MonevHub" style="width:100%;height:100%;border-radius:14px;object-fit:cover;display:block;pointer-events:none;">` : 'M'}
       </button>
 
       <div class="mh-panel mh-hide" id="monevhub-inpage-panel">
         <div class="mh-modal-header" id="mh-panel-drag-handle" title="Geser panel">
-          <h3>
-            <svg class="lucide" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-            </svg>
-            <span>Asisten MonevHub</span>
-          </h3>
+          <div class="mh-header-brand">
+            ${iconUrl ? `<img src="${iconUrl}" alt="MonevHub" style="width:28px;height:28px;border-radius:7px;object-fit:cover;flex-shrink:0;">` : ''}
+            <div>
+              <h3>Asisten MonevHub</h3>
+              <span class="mh-header-sub">MonevHub AI</span>
+            </div>
+          </div>
           <div class="mh-header-actions">
             <button class="mh-modal-opt-btn" id="mh-btn-modal-settings" title="Buka Dashboard & Pengaturan">
               <svg class="lucide" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -211,6 +206,11 @@
               </svg>
             </button>
           </div>
+        </div>
+
+        <div class="mh-status-strip">
+          <span class="mh-status-dot"></span>
+          <span>Status: <strong>Siap Mengisi Laporan</strong></span>
         </div>
 
         <div class="mh-modal-body">
@@ -265,17 +265,6 @@
         </div>
 
         <div class="mh-modal-footer">
-          <button id="mh-btn-m-open-dash" class="mh-btn-m-secondary" title="Buka Dashboard & Riwayat">
-            <svg class="lucide" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" x2="18" y1="20" y2="10"/>
-              <line x1="12" x2="12" y1="20" y2="4"/>
-              <line x1="6" x2="6" y1="20" y2="14"/>
-            </svg>
-            <span>Dashboard</span>
-          </button>
-          <button id="mh-btn-m-recap" class="mh-btn-m-secondary" title="Ekstrak & Susun Rekap AI Periode Aktif">
-            <span>Ekstrak &amp; Rekap</span>
-          </button>
           <button id="mh-btn-m-submit" class="mh-btn-m-primary">
             <svg class="lucide" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="m22 2-7 20-4-9-9-4Z"/>
@@ -283,6 +272,19 @@
             </svg>
             <span>Generate &amp; Terapkan</span>
           </button>
+          <div class="mh-footer-row">
+            <button id="mh-btn-m-open-dash" class="mh-btn-m-secondary" title="Buka Dashboard & Riwayat">
+              <svg class="lucide" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" x2="18" y1="20" y2="10"/>
+                <line x1="12" x2="12" y1="20" y2="4"/>
+                <line x1="6" x2="6" y1="20" y2="14"/>
+              </svg>
+              <span>Dashboard</span>
+            </button>
+            <button id="mh-btn-m-recap" class="mh-btn-m-secondary" title="Ekstrak & Susun Rekap AI Periode Aktif">
+              <span>Ekstrak &amp; Rekap</span>
+            </button>
+          </div>
         </div>
       </div>
     `;

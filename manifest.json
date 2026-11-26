@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "MonevHub AI - Asisten Laporan MagangHub",
+  "name": "MonevHub AI - Asisten Logbook & Laporan Harian",
   "version": "1.0.0",
-  "description": "Otomasi pengisian laporan harian MagangHub Kemnaker berbasis AI dengan rekap bulanan cerdas dan proteksi lisensi.",
+  "description": "Asisten pengisian logbook dan laporan harian berbasis AI dengan rekap bulanan cerdas dan ekspor PDF/Word.",
   "permissions": [
     "storage",
     "activeTab",
@@ -32,6 +32,7 @@
       ],
       "js": [
         "lib/license.js",
+        "lib/humanizer.js",
         "lib/ai.js",
         "content/content.js"
       ],
@@ -53,5 +54,17 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/icon16.png",
+        "icons/icon48.png",
+        "icons/icon128.png"
+      ],
+      "matches": [
+        "https://monev.maganghub.kemnaker.go.id/*"
+      ]
+    }
+  ]
 }
