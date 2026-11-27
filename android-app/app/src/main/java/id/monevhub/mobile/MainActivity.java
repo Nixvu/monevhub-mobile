@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
         settings.setGeolocationEnabled(true);
-        settings.setAllowFileAccess(false);
+        settings.setAllowFileAccess(true);
+        settings.setAllowFileAccessFromFileURLs(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
 
         CookieManager cookieManager = CookieManager.getInstance();
@@ -106,8 +107,24 @@ public class MainActivity extends AppCompatActivity {
         String initialUrl = getIntent() != null && getIntent().getBooleanExtra("open_riwayat", false)
                 ? "https://monev.maganghub.kemnaker.go.id/riwayat"
                 : TARGET_URL;
-        webView.loadUrl(initialUrl);
+        if (isLicenseActive()) {
+            webView.loadUrl(initialUrl);
+        } else {
+            webView.loadUrl("file:///android_asset/license-gate.html");
+        }
         ReminderReceiver.scheduleNext(this);
+    }
+
+    private boolean isLicenseActive() {
+        try {
+            SharedPreferences prefs = getSharedPreferences("monevhub_prefs", MODE_PRIVATE);
+            String raw = prefs.getString("chrome_monevhub_license", "");
+            if (raw == null || raw.isEmpty()) return false;
+            JSONObject obj = new JSONObject(raw);
+            return obj.optBoolean("active", false);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private void injectMonevScript() {
@@ -369,6 +386,16 @@ public class MainActivity extends AppCompatActivity {
                     return "{\"ok\":false,\"status\":0,\"error\":\"Network error\"}";
                 }
             }
+        }
+
+        @JavascriptInterface
+        public void openPortalAfterActivation() {
+            runOnUiThread(() -> {
+                String url = (getIntent() != null && getIntent().getBooleanExtra("open_riwayat", false))
+                        ? "https://monev.maganghub.kemnaker.go.id/riwayat"
+                        : TARGET_URL;
+                webView.loadUrl(url);
+            });
         }
 
         @JavascriptInterface

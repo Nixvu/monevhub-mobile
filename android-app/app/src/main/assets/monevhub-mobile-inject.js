@@ -129,6 +129,19 @@
       .mh-stat-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; }
       .mh-stat-num { font-size: 18px; font-weight: 800; color: #0f172a; }
       .mh-stat-lbl { font-size: 11px; color: #64748b; }
+      .mh-kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0; }
+      .mh-kpi-box {
+        background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px;
+        box-shadow: 0 2px 6px rgba(15,23,42,0.03); display: flex; flex-direction: column; gap: 3px;
+      }
+      .mh-kpi-val { font-size: 17px; font-weight: 800; color: #0f172a; }
+      .mh-kpi-lbl { font-size: 11px; color: #64748b; line-height: 1.3; }
+      .mh-table-wrap { overflow-x: auto; }
+      .mh-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+      .mh-table th { text-align: left; padding: 7px 6px; border-bottom: 1px solid #cbd5e1; color: #475569; font-weight: 700; white-space: nowrap; }
+      .mh-table td { padding: 8px 6px; border-bottom: 1px solid #f1f5f9; color: #0f172a; vertical-align: middle; }
+      .mh-btn-xs { padding: 4px 8px; border-radius: 7px; font-size: 10.5px; font-weight: 700; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; cursor: pointer; }
+      .mh-btn-xs-pri { background: #2563eb; color: #fff; border-color: #2563eb; }
     `;
     document.head.appendChild(st);
   }
@@ -280,15 +293,131 @@
     } catch (e) {}
   }
 
+  const BULAN_MAP = { jan: '01', feb: '02', mar: '03', apr: '04', mei: '05', jun: '06', jul: '07', agu: '08', ags: '08', sep: '09', okt: '10', nov: '11', des: '12', januari: '01', februari: '02', maret: '03', april: '04', juni: '06', juli: '07', agustus: '08', september: '09', oktober: '10', november: '11', desember: '12' };
+
+  function parseIndoDateIso(str) {
+    const m = String(str || '').toLowerCase().match(/(\d{1,2})\s+([a-z]+)\s+(\d{4})/);
+    if (!m) return '';
+    const mon = BULAN_MAP[m[2]] || BULAN_MAP[m[2].slice(0, 3)];
+    if (!mon) return '';
+    return `${m[3]}-${mon}-${m[1].padStart(2, '0')}`;
+  }
+
+  function shiftIsoMonths(iso, delta) {
+    const p = String(iso || '').split('-').map(Number);
+    if (p.length !== 3) return iso;
+    const d = new Date(p[0], p[1] - 1 + delta, p[2]);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  async function collectCalendarAndPeriodSync() {
+    const labelEl = document.querySelector('.ui-period-switcher__label');
+    if (!labelEl) return;
+    const raw = (labelEl.textContent || '').replace(/\s+/g, ' ').trim();
+    const pMatch = raw.match(/Periode\s+(\d+)/i);
+    const activeNum = pMatch ? parseInt(pMatch[1], 10) : 1;
+    const rangeParts = raw.replace(/Periode\s+\d+/i, '').trim().split(/\s*[-–]\s*/);
+    const startIso = parseIndoDateIso(rangeParts[0] || '');
+    const endIso = parseIndoDateIso(rangeParts[1] || '');
+
+    if (startIso && endIso) {
+      const store = await storageGet('monevhub_periods');
+      const prevLen = (store.monevhub_periods?.periods || []).length;
+      const nextBtn = document.querySelector('button[aria-label="Periode berikutnya"]');
+      const maxP = (nextBtn && nextBtn.disabled) ? activeNum : Math.max(activeNum, prevLen || activeNum);
+      const periods = [];
+      for (let i = 1; i <= maxP; i++) {
+        const delta = i - activeNum;
+        const s = shiftIsoMonths(startIso, delta);
+        const e = shiftIsoMonths(endIso, delta);
+        periods.push({ id: `P${i}`, num: i, name: `Periode ${i}`, start: s, end: e, label: `${s} s/d ${e}` });
+      }
+      await storageSet({ monevhub_periods: { periods, activePeriodNum: activeNum, updatedAt: Date.now() } });
+    }
+
+    const dayButtons = Array.from(document.querySelectorAll('button.calendar-day-button')).filter(b => b.offsetParent !== null);
+    if (dayButtons.length > 0) {
+      const summary = { id: `P${activeNum}`, name: `Periode ${activeNum}`, start: startIso, end: endIso, hadir: 0, sakit: 0, izin: 0, alpha: 0, libur: 0, belumDiisi: 0, updatedAt: Date.now() };
+      dayButtons.forEach(btn => {
+        const aria = (btn.getAttribute('aria-label') || '').toLowerCase();
+        const td = btn.closest('td');
+        if ((td && (td.classList.contains('scheduled-off-day') || td.classList.contains('api-holiday'))) || aria.includes('libur')) summary.libur++;
+        else if (aria.includes('sakit')) summary.sakit++;
+        else if (aria.includes('izin')) summary.izin++;
+        else if (aria.includes('tidak hadir') || aria.includes('alpha') || aria.includes('ditolak')) summary.alpha++;
+        else if (aria.includes('hadir')) summary.hadir++;
+        else summary.belumDiisi++;
+      });
+      const st = await storageGet('monevhub_attendance_summary');
+      const map = st.monevhub_attendance_summary || {};
+      map[`P${activeNum}`] = summary;
+      await storageSet({ monevhub_attendance_summary: map });
+    }
+  }
+
+  async function scrapeActivePeriodForMobile(showNotice) {
+    const btns = Array.from(document.querySelectorAll('button.calendar-day-button')).filter(b => b.offsetParent !== null);
+    if (!btns.length) return 0;
+    const filled = btns.filter(b => {
+      const a = (b.getAttribute('aria-label') || '').toLowerCase();
+      return (a.includes('hadir') || a.includes('izin') || a.includes('sakit')) && !a.includes('belum diisi');
+    });
+    if (!filled.length) {
+      if (showNotice) toast('Belum ada laporan terisi di periode ini.');
+      return 0;
+    }
+    const store = await storageGet('monevhub_history');
+    const history = Array.isArray(store.monevhub_history) ? store.monevhub_history : [];
+    let added = 0;
+
+    for (const btn of filled) {
+      const aria = btn.getAttribute('aria-label') || '';
+      const iso = parseIndoDateIso(aria);
+      if (!iso) continue;
+      btn.click();
+      await new Promise(r => setTimeout(r, 420));
+      const areas = Array.from(document.querySelectorAll('textarea')).filter(t => !t.closest('.mh-km-card') && !t.closest('.mh-modal-card'));
+      let uraian = '', pembelajaran = '', kendala = '';
+      if (areas.length >= 3) {
+        uraian = (areas[0].value || '').trim();
+        pembelajaran = (areas[1].value || '').trim();
+        kendala = (areas[2].value || '').trim();
+      } else {
+        const bodyTxt = (document.body.innerText || '');
+        const uMatch = bodyTxt.match(/Uraian Aktivitas\s*\n+([^\n]+)/i);
+        if (uMatch) uraian = uMatch[1].trim();
+      }
+      const presensi = /izin/i.test(aria) ? 'Izin' : (/sakit/i.test(aria) ? 'Sakit' : 'Hadir');
+      if (uraian) {
+        const item = { tanggal: iso, presensi, uraian, uraian_aktivitas: uraian, pembelajaran, kendala };
+        const idx = history.findIndex(h => h.tanggal === iso);
+        if (idx >= 0) history[idx] = item;
+        else history.push(item);
+        added++;
+      }
+    }
+    history.sort((a, b) => ((a.tanggal || '') > (b.tanggal || '') ? 1 : -1));
+    await storageSet({ monevhub_history: history, monevhub_last_autosync_ts: Date.now() });
+    if (showNotice) toast(`Sinkronisasi selesai: ${added} laporan tersimpan.`);
+    return added;
+  }
+
   async function scheduleMobileAutoSync() {
     syncAttendanceAndProfileToAndroid();
-    if (autoSyncedOnce || !window.location.pathname.toLowerCase().includes('riwayat')) return;
+    if (!window.location.pathname.toLowerCase().includes('riwayat')) return;
+    await collectCalendarAndPeriodSync();
+    if (autoSyncedOnce) return;
     const labelEl = document.querySelector('.ui-period-switcher__label');
     if (!labelEl) return;
     autoSyncedOnce = true;
     try {
       const text = (labelEl.textContent || '').trim();
       await storageSet({ monevhub_mobile_last_period: text, monevhub_last_autosync_ts: Date.now() });
+      const st = await storageGet('monevhub_history');
+      const forceSync = window.location.search.includes('mh_sync=1');
+      if (forceSync || !Array.isArray(st.monevhub_history) || st.monevhub_history.length === 0) {
+        setTimeout(() => { scrapeActivePeriodForMobile(forceSync).catch(() => {}); }, 700);
+      }
     } catch (e) {}
   }
 
@@ -304,6 +433,10 @@
     return (h.presensi || h.kehadiran || h.status || 'Hadir').trim();
   }
 
+  function getLogText(h) {
+    return (h.uraian || h.uraian_aktivitas || '').trim();
+  }
+
   function filterLogs(logs, { start, end, skipWeekend, skipAbsent, skipEmpty }) {
     return (logs || []).filter(h => {
       const t = h.tanggal || '';
@@ -315,7 +448,7 @@
       }
       const st = getLogStatus(h).toLowerCase();
       if (skipAbsent && (st.includes('alpa') || st.includes('izin') || st.includes('sakit') || st.includes('tidak'))) return false;
-      if (skipEmpty && !(h.uraian_aktivitas || '').trim()) return false;
+      if (skipEmpty && !getLogText(h)) return false;
       return true;
     });
   }
@@ -384,7 +517,7 @@
               <strong style="font-size:12px;color:#0f172a;">${esc(h.tanggal || '-')}</strong>
               <span class="mh-pill mh-pill-ok">${esc(getLogStatus(h))}</span>
             </div>
-            <div style="font-size:11.5px;color:#334155;line-height:1.4;">${esc((h.uraian_aktivitas || '(Belum diisi)').slice(0, 140))}</div>
+            <div style="font-size:11.5px;color:#334155;line-height:1.4;">${esc((getLogText(h) || '(Belum diisi)').slice(0, 140))}</div>
           </div>
         `).join('');
       };
@@ -413,8 +546,8 @@
         const rows = getFiltered();
         if (!rows.length) return toast('Tidak ada data yang cocok.');
         if (!confirm(`Hapus ${rows.length} laporan terfilter dari penyimpanan lokal?`)) return;
-        const removeSet = new Set(rows.map(r => r.tanggal + '|' + (r.uraian_aktivitas || '')));
-        currentLogs = currentLogs.filter(h => !removeSet.has(h.tanggal + '|' + (h.uraian_aktivitas || '')));
+        const removeSet = new Set(rows.map(r => r.tanggal + '|' + getLogText(r)));
+        currentLogs = currentLogs.filter(h => !removeSet.has(h.tanggal + '|' + getLogText(h)));
         await storageSet({ monevhub_history: currentLogs });
         render();
         toast(`Berhasil menghapus ${rows.length} laporan.`);
@@ -496,7 +629,7 @@
       else if (st.includes('sakit')) sakit++;
       else if (st.includes('alpa') || st.includes('tidak')) alpa++;
       else hadir++;
-      if ((h.uraian_aktivitas || '').trim().length >= 100) ready++;
+      if (getLogText(h).length >= 100) ready++;
     });
     const pct = logs.length ? Math.round((ready / logs.length) * 100) : 0;
 
@@ -868,7 +1001,7 @@
         <div class="mh-km-card">
           <div class="mh-inj-head">
             <strong>Isi Laporan Harian AI</strong>
-            <span class="mh-inj-tag">Asisten</span>
+            <button type="button" id="mh-riwayat-sync" class="mh-btn-xs">Sinkron Data</button>
           </div>
           <select id="mh-mob-presensi" class="mh-inj-select">
             <option value="Hadir" selected>Hadir</option>
@@ -884,6 +1017,11 @@
         </div>
       `;
       target.appendChild(wrap);
+
+      document.getElementById('mh-riwayat-sync')?.addEventListener('click', async () => {
+        await collectCalendarAndPeriodSync();
+        await scrapeActivePeriodForMobile(true);
+      });
 
       const presEl = document.getElementById('mh-mob-presensi');
       const actEl = document.getElementById('mh-mob-act');
@@ -905,14 +1043,14 @@
           const rep = window.MonevHubAI
             ? await window.MonevHubAI.generateDailyReport({ rawKegiatan: raw, hasKendala: false, presensi: presEl.value })
             : {
-                uraian_aktivitas: `Melaksanakan ${raw} secara tertib, terstruktur, dan profesional sesuai prosedur operasional instansi hingga tuntas.`,
+                uraian_aktivitas: `Melaksanakan ${raw} secara tertib, terstruktur, dan profesional sesuai prosedur operasional hingga tuntas.`,
                 pembelajaran: 'Meningkatkan ketelitian teknis, pemahaman alur kerja, dan koordinasi tim selama pelaksanaan tugas.',
                 kendala: 'Seluruh kegiatan terlaksana lancar dan tertib tanpa hambatan teknis yang berarti.'
               };
           setNativeValue(areas[0], rep.uraian_aktivitas);
           setNativeValue(areas[1], rep.pembelajaran);
           setNativeValue(areas[2], rep.kendala);
-          toast('Form laporan Monev berhasil diisi!');
+          toast('Form laporan berhasil diisi!');
         } catch (err) {
           toast('Gagal AI: ' + err.message);
         } finally {
@@ -927,11 +1065,11 @@
     } else if (path.includes('perkembangan')) {
       wrap.innerHTML = `
         <div style="font-size:12px;font-weight:700;color:#64748b;margin:8px 0 4px;">ASISTEN MONEVHUB</div>
-        ${menuCard('mh-menu-log', 'PDF', '#eff6ff', '#2563eb', 'Log Riwayat & Ekspor PDF/Word', 'Filter tanggal, hapus data, cetak PDF & DOCX')}
-        ${menuCard('mh-menu-recap', 'AI', '#f5f3ff', '#7c3aed', 'Ringkasan & Rekapitulasi AI', 'Buat rangkuman evaluasi bulanan otomatis')}
-        ${menuCard('mh-menu-stats', '%', '#ecfdf5', '#059669', 'Statistik Kehadiran & Kesiapan', 'Pantau Hadir, Izin, Sakit, Alpa & kesiapan ekspor')}
+        ${menuCard('mh-menu-log', 'PDF', '#eff6ff', '#2563eb', 'Log Riwayat & Ekspor', 'Filter periode, cari laporan, unduh PDF/Word')}
+        ${menuCard('mh-menu-recap', 'AI', '#f5f3ff', '#7c3aed', 'Rekapitulasi Bulanan AI', 'Susun evaluasi bulanan otomatis per periode')}
+        ${menuCard('mh-menu-stats', '%', '#ecfdf5', '#059669', 'Statistik Kehadiran', 'Rekap Hadir, Sakit, Izin, Alpha, & Siap Ekspor')}
       `;
-      target.appendChild(wrap);
+      target.prepend(wrap);
       document.getElementById('mh-menu-log')?.addEventListener('click', openHistoryExportModal);
       document.getElementById('mh-menu-recap')?.addEventListener('click', openAiRecapModal);
       document.getElementById('mh-menu-stats')?.addEventListener('click', openAttendanceStatsModal);
@@ -942,6 +1080,15 @@
         if (window.AndroidBridge) perms = JSON.parse(window.AndroidBridge.checkPermissions());
       } catch (e) {}
 
+      // Sembunyikan kartu "Notifikasi perangkat" bawaan web agar menyatu dengan kartu Android
+      document.querySelectorAll('div, section, article').forEach(el => {
+        if (el.closest('.mh-route-block')) return;
+        const txt = (el.innerText || '').toLowerCase();
+        if (txt.includes('notifikasi perangkat') && txt.includes('browser ini tidak mendukung') && txt.length < 180) {
+          el.style.display = 'none';
+        }
+      });
+
       wrap.innerHTML = `
         <div style="font-size:12px;font-weight:700;color:#64748b;margin:8px 0 4px;">PENGATURAN MONEVHUB</div>
         ${menuCard('mh-set-ai', 'AI', '#eff6ff', '#2563eb', 'Konfigurasi Engine AI', 'Pilih Injected, API Key (Gemini/OpenAI/Groq), atau OAuth')}
@@ -950,17 +1097,34 @@
         ${menuCard('mh-set-lic', 'KEY', '#f5f3ff', '#7c3aed', 'Detail Lisensi & Perangkat', 'Cek aktivasi perangkat dan reset lisensi')}
         <div class="mh-km-card">
           <div class="mh-inj-head">
-            <strong>Cek Akses &amp; Izin Perangkat</strong>
+            <strong>Notifikasi &amp; Izin Perangkat</strong>
             <span class="mh-inj-tag">Android</span>
           </div>
+          <div class="mh-inj-row"><span>Pengingat Absen (17:00 WIB)</span><span class="mh-pill mh-pill-ok">Aktif</span></div>
           <div class="mh-inj-row"><span>Lokasi / GPS</span><span class="mh-pill ${perms.gps ? 'mh-pill-ok' : 'mh-pill-warn'}">${perms.gps ? 'Diizinkan' : 'Belum'}</span></div>
           <div class="mh-inj-row"><span>Penyimpanan / Unduhan</span><span class="mh-pill ${perms.storage ? 'mh-pill-ok' : 'mh-pill-warn'}">${perms.storage ? 'Diizinkan' : 'Belum'}</span></div>
           <div class="mh-inj-row"><span>Notifikasi</span><span class="mh-pill ${perms.notification ? 'mh-pill-ok' : 'mh-pill-warn'}">${perms.notification ? 'Diizinkan' : 'Belum'}</span></div>
-          <button type="button" id="mh-mob-req-perms" class="mh-inj-btn" style="margin-top:8px;">Minta Semua Izin Akses</button>
-          <button type="button" id="mh-mob-test-notif" class="mh-inj-btn mh-inj-btn-sec" style="margin-top:6px;">Tes Notifikasi Pengingat Absen</button>
+          <div class="mh-inj-grid-2" style="margin-top:8px;">
+            <button type="button" id="mh-mob-req-perms" class="mh-inj-btn">Minta Izin Akses</button>
+            <button type="button" id="mh-mob-test-notif" class="mh-inj-btn mh-inj-btn-sec">Tes Notifikasi</button>
+          </div>
         </div>
       `;
       target.appendChild(wrap);
+
+      // Pindahkan tombol "Keluar dari akun" ke paling bawah agar rapih
+      const logoutBtn = Array.from(document.querySelectorAll('button, a')).find(b =>
+        !b.closest('.mh-route-block') && /keluar dari akun/i.test((b.textContent || '').trim())
+      );
+      if (logoutBtn) {
+        const box = document.createElement('div');
+        box.style.marginTop = '14px';
+        box.style.display = 'flex';
+        box.style.justifyContent = 'center';
+        box.appendChild(logoutBtn);
+        wrap.appendChild(box);
+      }
+
       document.getElementById('mh-set-ai')?.addEventListener('click', openAiSettingsModal);
       document.getElementById('mh-set-tpl')?.addEventListener('click', openExportTemplateModal);
       document.getElementById('mh-set-loc')?.addEventListener('click', openLocationModal);
@@ -975,25 +1139,99 @@
       });
 
     } else {
-      const autoDev = window.MonevHubLicense ? window.MonevHubLicense.detectDeviceLabel() : 'HP - Android';
+      // Beranda Dashboard (Match mobile/index.html: 4 KPI Cards + Tabel Rekap Absensi & Kesiapan Ekspor)
+      const bodyTxt = (document.body.innerText || '').toLowerCase();
+      if (path.includes('login') || (!bodyTxt.includes('hari ini') && !bodyTxt.includes('periode'))) return;
+
+      const store = await storageGet(['monevhub_history', 'monevhub_periods', 'monevhub_attendance_summary', 'monevhub_export_config']);
+      const logs = Array.isArray(store.monevhub_history) ? store.monevhub_history : [];
+      const periods = Array.isArray(store.monevhub_periods?.periods) ? store.monevhub_periods.periods : [];
+      const sumMap = store.monevhub_attendance_summary || {};
+      const expCfg = store.monevhub_export_config || {};
+
+      let totH = 0, totS = 0, totI = 0, totA = 0;
+      const sumVals = Object.values(sumMap);
+      if (sumVals.length) {
+        sumVals.forEach(s => { totH += s.hadir || 0; totS += s.sakit || 0; totI += s.izin || 0; totA += s.alpha || 0; });
+      } else {
+        logs.forEach(h => {
+          const st = getLogStatus(h).toLowerCase();
+          if (st.includes('sakit')) totS++;
+          else if (st.includes('izin')) totI++;
+          else if (st.includes('alpa') || st.includes('tidak')) totA++;
+          else totH++;
+        });
+      }
+      const totAll = totH + totS + totI + totA;
+      const pctH = totAll ? Math.round((totH / totAll) * 100) : 0;
+      const readyCount = logs.filter(h => getLogText(h).length >= 100).length;
+      const tplLabel = expCfg.templateId === 'tpl2' ? 'Template 2' : (expCfg.templateId === 'tpl3' ? 'Template 3' : 'Template 1');
+      const oriLabel = expCfg.orientation === 'portrait' ? 'Portrait' : 'Landscape';
+      const ttdLabel = expCfg.showSignature !== false ? 'TTD Aktif' : 'TTD Nonaktif';
+
+      const rowsHtml = periods.length
+        ? periods.map((p, idx) => {
+            const s = sumMap[p.id] || {};
+            const pLogs = logs.filter(h => (h.tanggal || '') >= p.start && (h.tanggal || '') <= p.end);
+            const pReady = pLogs.filter(h => getLogText(h).length >= 100).length;
+            return `
+              <tr>
+                <td>${idx + 1}</td>
+                <td><strong>${esc(p.name)}</strong><br><span style="font-size:9.5px;color:#64748b;">${esc(p.start)}–${esc(p.end)}</span></td>
+                <td style="color:#059669;font-weight:700;">${s.hadir ?? pLogs.length}</td>
+                <td>${s.sakit ?? 0}</td>
+                <td>${s.izin ?? 0}</td>
+                <td>${s.alpha ?? 0}</td>
+                <td><span class="mh-pill mh-pill-ok">${pReady}</span></td>
+                <td style="white-space:nowrap;">
+                  <button type="button" class="mh-btn-xs mh-btn-xs-pri mh-home-exp">Ekspor</button>
+                  <button type="button" class="mh-btn-xs mh-home-recap">Rekap</button>
+                </td>
+              </tr>
+            `;
+          }).join('')
+        : `<tr><td colspan="8" style="text-align:center;color:#64748b;padding:12px;">Belum ada data periode. Klik <strong>Sinkron</strong> untuk mengambil data kalender.</td></tr>`;
+
       wrap.innerHTML = `
+        <div class="mh-kpi-grid">
+          <div class="mh-kpi-box">
+            <span class="mh-kpi-val" style="color:#059669;">${totH} hari</span>
+            <span class="mh-kpi-lbl">Hadir / Masuk (${pctH}%)</span>
+          </div>
+          <div class="mh-kpi-box">
+            <span class="mh-kpi-val" style="color:#d97706;">${totS + totI + totA} hari</span>
+            <span class="mh-kpi-lbl">${totS} Sakit &bull; ${totI} Izin &bull; ${totA} Alpha</span>
+          </div>
+          <div class="mh-kpi-box">
+            <span class="mh-kpi-val">${readyCount}</span>
+            <span class="mh-kpi-lbl">Laporan Siap Ekspor</span>
+          </div>
+          <div class="mh-kpi-box">
+            <span class="mh-kpi-val" style="font-size:14px;padding-top:3px;">${tplLabel}</span>
+            <span class="mh-kpi-lbl">A4 ${oriLabel} &bull; ${ttdLabel}</span>
+          </div>
+        </div>
         <div class="mh-km-card">
           <div class="mh-inj-head">
-            <strong>Ringkasan Asisten MonevHub</strong>
-            <span class="mh-pill mh-pill-ok">AKTIF</span>
+            <strong>Rekap Absensi &amp; Kesiapan Ekspor</strong>
+            <button type="button" id="mh-beranda-sync" class="mh-btn-xs">Sinkron</button>
           </div>
-          <div style="font-size:12px;color:#334155;display:grid;gap:6px;">
-            <div style="display:flex;justify-content:space-between;"><span>Perangkat</span><strong>${esc(autoDev)}</strong></div>
-            <div class="mh-inj-grid-2" style="margin-top:4px;">
-              <button type="button" id="mh-home-log" class="mh-inj-btn mh-inj-btn-sec">Log &amp; Ekspor</button>
-              <button type="button" id="mh-home-stats" class="mh-inj-btn mh-inj-btn-sec">Statistik</button>
-            </div>
+          <div class="mh-table-wrap">
+            <table class="mh-table">
+              <thead>
+                <tr><th>No</th><th>Periode</th><th>H</th><th>S</th><th>I</th><th>A</th><th>Siap</th><th>Aksi</th></tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
           </div>
         </div>
       `;
       target.appendChild(wrap);
-      document.getElementById('mh-home-log')?.addEventListener('click', openHistoryExportModal);
-      document.getElementById('mh-home-stats')?.addEventListener('click', openAttendanceStatsModal);
+      document.getElementById('mh-beranda-sync')?.addEventListener('click', () => {
+        window.location.href = '/riwayat?mh_sync=1';
+      });
+      wrap.querySelectorAll('.mh-home-exp').forEach(b => b.addEventListener('click', openHistoryExportModal));
+      wrap.querySelectorAll('.mh-home-recap').forEach(b => b.addEventListener('click', openAiRecapModal));
     }
   }
 
