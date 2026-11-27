@@ -26,13 +26,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -281,6 +288,87 @@ public class MainActivity extends AppCompatActivity {
         @JavascriptInterface
         public void requestAllPermissions() {
             runOnUiThread(() -> requestNeededPermissions());
+        }
+
+        @JavascriptInterface
+        public String httpRequest(String urlStr, String method, String body, String headersJson) {
+            try {
+                String curUrl = urlStr;
+                String curMethod = (method == null || method.isEmpty()) ? "GET" : method.toUpperCase();
+                String curBody = body;
+
+                for (int hop = 0; hop < 6; hop++) {
+                    HttpURLConnection conn = (HttpURLConnection) new URL(curUrl).openConnection();
+                    conn.setInstanceFollowRedirects(false);
+                    conn.setConnectTimeout(20000);
+                    conn.setReadTimeout(30000);
+                    conn.setRequestMethod(curMethod);
+
+                    if (headersJson != null && !headersJson.isEmpty()) {
+                        JSONObject hdrs = new JSONObject(headersJson);
+                        Iterator<String> keys = hdrs.keys();
+                        while (keys.hasNext()) {
+                            String k = keys.next();
+                            conn.setRequestProperty(k, hdrs.optString(k, ""));
+                        }
+                    }
+
+                    if (curBody != null && ("POST".equals(curMethod) || "PUT".equals(curMethod) || "PATCH".equals(curMethod))) {
+                        conn.setDoOutput(true);
+                        byte[] outBytes = curBody.getBytes(StandardCharsets.UTF_8);
+                        try (OutputStream os = conn.getOutputStream()) {
+                            os.write(outBytes);
+                        }
+                    }
+
+                    int code = conn.getResponseCode();
+                    if (code == 301 || code == 302 || code == 303 || code == 307 || code == 308) {
+                        String loc = conn.getHeaderField("Location");
+                        conn.disconnect();
+                        if (loc == null || loc.isEmpty()) break;
+                        curUrl = new URL(new URL(curUrl), loc).toString();
+                        if (code != 307 && code != 308 && "POST".equals(curMethod)) {
+                            curMethod = "GET";
+                            curBody = null;
+                        }
+                        continue;
+                    }
+
+                    InputStream is = (code >= 200 && code < 400) ? conn.getInputStream() : conn.getErrorStream();
+                    String respText = "";
+                    if (is != null) {
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        byte[] buf = new byte[4096];
+                        int n;
+                        while ((n = is.read(buf)) != -1) {
+                            baos.write(buf, 0, n);
+                        }
+                        respText = baos.toString("UTF-8");
+                    }
+                    conn.disconnect();
+
+                    JSONObject res = new JSONObject();
+                    res.put("ok", code >= 200 && code < 300);
+                    res.put("status", code);
+                    res.put("text", respText);
+                    return res.toString();
+                }
+                JSONObject err = new JSONObject();
+                err.put("ok", false);
+                err.put("status", 0);
+                err.put("error", "Too many redirects");
+                return err.toString();
+            } catch (Exception e) {
+                try {
+                    JSONObject err = new JSONObject();
+                    err.put("ok", false);
+                    err.put("status", 0);
+                    err.put("error", e.getMessage() != null ? e.getMessage() : "Network error");
+                    return err.toString();
+                } catch (Exception ignored) {
+                    return "{\"ok\":false,\"status\":0,\"error\":\"Network error\"}";
+                }
+            }
         }
 
         @JavascriptInterface

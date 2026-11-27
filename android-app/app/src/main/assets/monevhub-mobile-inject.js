@@ -7,6 +7,53 @@
   if (window.__mhMobileInjected) return;
   window.__mhMobileInjected = true;
 
+  // Bypass CORS WebView untuk panggilan API eksternal (GAS Lisensi, Gemini/OpenAI/Groq, Peta)
+  if (window.AndroidBridge && window.AndroidBridge.httpRequest && !window.__mhFetchPatched) {
+    window.__mhFetchPatched = true;
+    const origFetch = window.fetch.bind(window);
+    const EXTERNAL_HOSTS = [
+      'script.google.com',
+      'script.googleusercontent.com',
+      'generativelanguage.googleapis.com',
+      'api.openai.com',
+      'api.deepseek.com',
+      'api.groq.com',
+      'openrouter.ai',
+      'nominatim.openstreetmap.org',
+      'photon.komoot.io'
+    ];
+    window.fetch = async function (input, init = {}) {
+      const url = typeof input === 'string' ? input : (input && input.url) || '';
+      const isExternal = EXTERNAL_HOSTS.some(h => url.includes(h));
+      if (!isExternal) {
+        return origFetch(input, init);
+      }
+      const method = (init.method || (input && input.method) || 'GET').toUpperCase();
+      let hdrs = {};
+      if (init.headers) {
+        if (init.headers instanceof Headers) {
+          init.headers.forEach((v, k) => { hdrs[k] = v; });
+        } else if (typeof init.headers === 'object') {
+          hdrs = { ...init.headers };
+        }
+      }
+      const body = typeof init.body === 'string' ? init.body : (init.body ? String(init.body) : '');
+      const raw = window.AndroidBridge.httpRequest(url, method, body, JSON.stringify(hdrs));
+      const parsed = JSON.parse(raw || '{}');
+      if (parsed.status === 0 && parsed.error) {
+        throw new TypeError(parsed.error);
+      }
+      const textBody = parsed.text || '';
+      return {
+        ok: Boolean(parsed.ok),
+        status: parsed.status || 200,
+        statusText: parsed.ok ? 'OK' : 'Error',
+        text: async () => textBody,
+        json: async () => JSON.parse(textBody)
+      };
+    };
+  }
+
   const STYLE_ID = 'mh-mobile-inject-style';
   if (!document.getElementById(STYLE_ID)) {
     const st = document.createElement('style');
